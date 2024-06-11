@@ -276,7 +276,24 @@ return [
             ),
             // Public x509 certificate of the IdP
             'x509cert' => env('SAML2_IDP_x509', '
-            MIIDPzCCAiegAwIBAgIUNGqshJMfDRUUamC/0judzWfXRzMwDQYJKoZIhvcNAQEL BQAwIDEeMBwGA1UEAwwVaWRwLmNjLmJpbmdoYW10b24uZWR1MB4XDTE2MDExNzAx NDk1NloXDTM2MDExNzAxNDk1NlowIDEeMBwGA1UEAwwVaWRwLmNjLmJpbmdoYW10 b24uZWR1MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmHJJsNq34KLb eCFXoLuyWFE8WeCRfagWHcU9cJhA26IoscpS031mgj+KdnZIGKBG8Qvm2ob8giNR C9A6dblsbmMgGbEXgugFXHzh7BL4THE/5vCoVXyT8cEcpneA51Cy1OK3hqv2OKD6 QgIRgbovElJeJB/M2V/2cpD9eq7klxkHgvSdm0/QYhpqx50cFcB0WHXE8Mpr2tne Hkl9tyBjbcXTYU3Bl6IfgJMFJ+DF70gVSu/hQz6eOzV1ZGTKd+k2iqyZqQaCfIL+ c1suMSFtk4wKLkBQDP9JsSayvyKngLcbmc4/V3fV/HquxNpxuAjHUv8LUbDgAN3q 0OWbuy4OIwIDAQABo3EwbzAdBgNVHQ4EFgQURTv5CG3wzpfj/BDoWcL3UncfFWAw TgYDVR0RBEcwRYIVaWRwLmNjLmJpbmdoYW10b24uZWR1hixodHRwczovL2lkcC5j Yy5iaW5naGFtdG9uLmVkdS9pZHAvc2hpYmJvbGV0aDANBgkqhkiG9w0BAQsFAAOC AQEAiCk13WUgaVpymalSbihawWqgkIxiiMclpWaWSY807rZFuIEUWJbnopgedt6H +BSIxX7A7w+GJfF4fS13mRRlEL2h9ONj4EwbznDNprCxcs+EG7FBpW6VKJd/gnj/ VDss4JT6ZOLQodl3wQ5LvwZ1zEeu811FQxSQaEpf69GyaQ/FCs57MDOHqMiAWGux 6mhUpGwo9S0bk2C8D6SapD1ZGWmqcyxudsabKDupSUKU2cwslxj8XVinRTx8zZuc 6VkzTV9Rc4vzes6atMo8AD8L2+As/e7vxBbR8pu40t9LlPe7f2MalA8yCCxPOlEn ljahXnbPNzvZc18kx0CUWRMMJQ==
+            MIIDPzCCAiegAwIBAgIUNGqshJMfDRUUamC/0judzWfXRzMwDQYJKoZIhvcNAQEL
+            BQAwIDEeMBwGA1UEAwwVaWRwLmNjLmJpbmdoYW10b24uZWR1MB4XDTE2MDExNzAx
+            NDk1NloXDTM2MDExNzAxNDk1NlowIDEeMBwGA1UEAwwVaWRwLmNjLmJpbmdoYW10
+            b24uZWR1MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmHJJsNq34KLb
+            eCFXoLuyWFE8WeCRfagWHcU9cJhA26IoscpS031mgj+KdnZIGKBG8Qvm2ob8giNR
+            C9A6dblsbmMgGbEXgugFXHzh7BL4THE/5vCoVXyT8cEcpneA51Cy1OK3hqv2OKD6
+            QgIRgbovElJeJB/M2V/2cpD9eq7klxkHgvSdm0/QYhpqx50cFcB0WHXE8Mpr2tne
+            Hkl9tyBjbcXTYU3Bl6IfgJMFJ+DF70gVSu/hQz6eOzV1ZGTKd+k2iqyZqQaCfIL+
+            c1suMSFtk4wKLkBQDP9JsSayvyKngLcbmc4/V3fV/HquxNpxuAjHUv8LUbDgAN3q
+            0OWbuy4OIwIDAQABo3EwbzAdBgNVHQ4EFgQURTv5CG3wzpfj/BDoWcL3UncfFWAw
+            TgYDVR0RBEcwRYIVaWRwLmNjLmJpbmdoYW10b24uZWR1hixodHRwczovL2lkcC5j
+            Yy5iaW5naGFtdG9uLmVkdS9pZHAvc2hpYmJvbGV0aDANBgkqhkiG9w0BAQsFAAOC
+            AQEAiCk13WUgaVpymalSbihawWqgkIxiiMclpWaWSY807rZFuIEUWJbnopgedt6H
+            +BSIxX7A7w+GJfF4fS13mRRlEL2h9ONj4EwbznDNprCxcs+EG7FBpW6VKJd/gnj/
+            VDss4JT6ZOLQodl3wQ5LvwZ1zEeu811FQxSQaEpf69GyaQ/FCs57MDOHqMiAWGux
+            6mhUpGwo9S0bk2C8D6SapD1ZGWmqcyxudsabKDupSUKU2cwslxj8XVinRTx8zZuc
+            6VkzTV9Rc4vzes6atMo8AD8L2+As/e7vxBbR8pu40t9LlPe7f2MalA8yCCxPOlEn
+            ljahXnbPNzvZc18kx0CUWRMMJQ==
             '),
             /*
                 *  Instead of use the whole x509cert you can use a fingerprint
