@@ -105,7 +105,16 @@ class Saml2Controller extends Controller
         $id = $relay_state->idp;
         $redirect = $relay_state->redirect;
         
-        config(['saml2_settings.idp' => config('saml2_settings.idps.'.$site)]);
+        $idp = IDP::where('id',$id)->first();
+        config(['saml2_settings.idp' => [
+            'name' => $idp->name,
+            'entityId' => $idp->entityId,
+            'singleSignOnService' => ['url'=>$idp->singleSignOnServiceUrl],
+            'singleLogoutService' => ['url'=>$idp->singleLogoutServiceUrl],
+            'x509cert' => $idp->x509cert,
+            'data_map' => $idp->config
+        ]]);
+
         $this->saml2Auth->configure();
 
         // try {
@@ -115,6 +124,7 @@ class Saml2Controller extends Controller
         // }
 
         if (!empty($errors)) {
+            var_dump($errors); var_dump($this->saml2Auth->getLastErrorReason()); exit();
             logger()->error('Saml2 error_detail', ['error' => $this->saml2Auth->getLastErrorReason()]);
             session()->flash('saml2_error_detail', [$this->saml2Auth->getLastErrorReason()]);
 
@@ -166,6 +176,7 @@ class Saml2Controller extends Controller
         $user->idp = $site;
         $user->last_login = now();
         $user->save();
+
         Auth::login($user, true);
 
         if ($redirect !== null) {
