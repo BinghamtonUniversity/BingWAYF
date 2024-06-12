@@ -6,7 +6,8 @@ use App\Libraries\Saml2Auth;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use App\Libraries\SAML2AuthWrapper;
-use App\User;
+use App\Models\User;
+use App\Models\IDP;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
@@ -27,19 +28,28 @@ class Saml2Controller extends Controller
 
     public function wayf() {
         if(!Auth::user()){
+            $idps = IDP::orderBy('id','asc')->get();
             $enabled_idps = explode(',',config('saml2_settings.enabled_idps'));
-            return view('wayf',['enabled_idps'=>$enabled_idps]);
+            return view('wayf',['idps'=>$idps]);
         } else {
             return redirect('/');
         }  
     }
 
-    public function wayfcallback($site) {
+    public function wayfcallback($id) {
         if(!Auth::user()){
-            config(['saml2_settings.idp' => config('saml2_settings.idps.'.$site)]);
+            $idp = IDP::where('id',$id)->first();
+            config(['saml2_settings.idp' => [
+                'name' => $idp->name,
+                'entityId' => $idp->entityId,
+                'singleSignOnService' => ['url'=>$idp->singleSignOnServiceUrl],
+                'singleLogoutService' => ['url'=>$idp->singleLogoutServiceUrl],
+                'x509cert' => $idp->x509cert,
+                'data_map' => $idp->config
+            ]]);
             $this->saml2Auth->configure();
             // Construct the RelayState Variable to contain the correct IDP and Redirect URL
-            $relay_state = ['idp'=>$site,'redirect'=>isset(request()->redirect)?request()->redirect:null];
+            $relay_state = ['idp'=>$id,'redirect'=>isset(request()->redirect)?request()->redirect:null];
             $relay_state = strtr(base64_encode(json_encode($relay_state)),'+/=','._-');
             return $this->saml2Auth->login($relay_state);
         } else {
@@ -51,6 +61,7 @@ class Saml2Controller extends Controller
         return Socialite::driver('google')
             ->redirect();
     }
+
     public function google_callback(Request $request) {
         $idp_user = Socialite::driver('google')->user();
 
@@ -79,8 +90,7 @@ class Saml2Controller extends Controller
      * Generate local sp metadata
      * @return \Illuminate\Http\Response
      */
-    public function metadata()
-    {
+    public function metadata() {
         $metadata = $this->saml2Auth->getMetadata();
         return response($metadata, 200, ['Content-Type' => 'text/xml']);
     }
@@ -89,11 +99,10 @@ class Saml2Controller extends Controller
      * Process an incoming saml2 assertion request.
      * Fires 'Saml2LoginEvent' event if a valid user is Found
      */
-    public function acs()
-    {
+    public function acs() {
         // Deconstruct the RelayState Variable to fetch the correct IDP and Redirect URL
         $relay_state = json_decode(base64_decode(strtr(request()->input('RelayState'),'._-','+/=')));
-        $site = $relay_state->idp;
+        $id = $relay_state->idp;
         $redirect = $relay_state->redirect;
         
         config(['saml2_settings.idp' => config('saml2_settings.idps.'.$site)]);
@@ -133,12 +142,18 @@ class Saml2Controller extends Controller
             // echo '<pre>'.print_r($messageId,true).'</pre>';
             exit();
         }
-        $data_map = config('saml2_settings.idp.data_map');
+
+        $data_map = [
+            'unique_id' => '{{#eduPersonTargetedID}}{{eduPersonTargetedID}}{{/eduPersonTargetedID}}{{^eduPersonTargetedID}}{{mail}}{{/eduPersonTargetedID}}',
+            'first_name' => '{{givenName}}',
+            'last_name' => '{{sn}}',
+            'email' => '{{mail}}',
+        ];
+
         $m = new \Mustache_Engine;                                    
         $user = User::where('unique_id', $m->render($data_map['unique_id'], $saml_attributes))
             ->where(function ($query) use ($site) {
-                $query->where('idp',$site)
-                    ->orWhereNull('idp');
+                $query->where('idp',$site)->orWhereNull('idp');
             })
             ->first();
         if ($user === null) {
@@ -165,8 +180,7 @@ class Saml2Controller extends Controller
      * Fires 'saml2.logoutRequestReceived' event if its valid.
      * This means the user logged out of the SSO infrastructure, you 'should' log him out locally too.
      */
-    public function sls()
-    {
+    public function sls() {
         $error = $this->saml2Auth->sls(config('saml2_settings.retrieveParametersFromServer'));
         if (!empty($error)) {
             throw new \Exception("Could not log out");
@@ -178,8 +192,7 @@ class Saml2Controller extends Controller
     /**
      * This initiates a logout request across all the SSO infrastructure.
      */
-    public function logout(Request $request)
-    {
+    public function logout(Request $request) {
         Auth::logout();
         Session::save();    
         $returnTo = $request->query('returnTo');
@@ -194,13 +207,13 @@ class Saml2Controller extends Controller
         return view('logout',['full_logout' => $full_logout]);
     }
 
-    public function idps(Request $request)
-    {
+    public function idps(Request $request) {
         $idps = [];
         $idps[] = ['value'=>null,'label'=>'None'];
         $idps[] = ['value'=>'google','label'=>'Google'];
-        foreach(config('saml2_settings.idps') as $idp_name => $idp) {
-            $idps[] = ['value'=>$idp_name, 'label'=>$idp['name']];
+        $allidps = IDP::get();
+        foreach($allidps as $idp) {
+            $idps[] = ['value'=>$idp->id, 'label'=>$idp->name];
         }
         return $idps;
     }

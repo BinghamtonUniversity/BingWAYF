@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Models\IDP;
 
 class parsemetadata extends Command
 {
@@ -26,7 +27,14 @@ class parsemetadata extends Command
     public function handle()
     {
         ini_set('memory_limit','10240M');
-        $xml = file_get_contents('/Users/tcortesi/Downloads/metadata.xml');
+
+        $this->output->write("<info>Downloading XML metadata ...</info> ",false);
+        $xml = file_get_contents('https://mdq.incommon.org/entities');
+        $this->info('done!');
+        $this->newLine(1);
+
+        $this->info('Parsing metadata ...');
+
         libxml_use_internal_errors(true);
         $cleanup_string = preg_replace("/(<\/?)(\w+):([^>]*>)/", "$1$2$3", $xml);
         $doc = @simplexml_load_string($cleanup_string);
@@ -34,16 +42,19 @@ class parsemetadata extends Command
             echo "OH NO IT BROKE!";
         }
         $data = json_decode(json_encode($doc),true);
-
+ 
+        $bar = $this->output->createProgressBar(count($data));
+        $bar->start();
         $entities = [];
         foreach($data['EntityDescriptor'] as $entity) {
+            $bar->advance();
             if (isset($entity['IDPSSODescriptor'])) {
                 // Initailize Entity
                 $newentity = [
                     'name' => null,
                     'entityId' => $entity['@attributes']['entityID'],
-                    'singleSignOnService' => ['url' => null],
-                    'singleLogoutService' => ['url' => null],
+                    'singleSignOnServiceUrl' => null,
+                    'singleLogoutServiceUrl' => null,
                     'x509cert' => null,
                     'logo' => null
                 ];
@@ -60,7 +71,7 @@ class parsemetadata extends Command
                 if (isset($entity['IDPSSODescriptor']['SingleSignOnService'])) {
                     foreach($entity['IDPSSODescriptor']['SingleSignOnService'] as $descriptor) {
                         if (isset($descriptor['@attributes']['Binding']) && $descriptor['@attributes']['Binding'] === 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect') {
-                            $newentity['singleSignOnService'] = ['url' => $descriptor['@attributes']['Location']];
+                            $newentity['singleSignOnServiceUrl'] = $descriptor['@attributes']['Location'];
                         }
                     }
                 }
@@ -68,7 +79,7 @@ class parsemetadata extends Command
                 if (isset($entity['IDPSSODescriptor']['SingleLogoutService'])) {
                     foreach($entity['IDPSSODescriptor']['SingleLogoutService'] as $descriptor) {
                         if (isset($descriptor['@attributes']['Binding']) && $descriptor['@attributes']['Binding'] === 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect') {
-                            $newentity['singleLogoutService'] = ['url' => $descriptor['@attributes']['Location']];
+                            $newentity['singleLogoutService'] = $descriptor['@attributes']['Location'];
                         }
                     }
                 }
@@ -98,7 +109,7 @@ class parsemetadata extends Command
                 if (isset($keydescriptor['dsKeyInfo']) && 
                     isset($keydescriptor['dsKeyInfo']['dsX509Data']) &&
                     isset($keydescriptor['dsKeyInfo']['dsX509Data']['dsX509Certificate'])) {
-                    $newentity['x509cert'] = $keydescriptor['dsKeyInfo']['dsX509Data']['dsX509Certificate'];
+                    $newentity['x509cert'] = trim($keydescriptor['dsKeyInfo']['dsX509Data']['dsX509Certificate']);
                 } 
                 // Set LOGO
                 if (isset($entity['IDPSSODescriptor']['Extensions']['mduiUIInfo']['mduiLogo'])) {
@@ -108,10 +119,27 @@ class parsemetadata extends Command
                         $newentity['logo'] = $entity['IDPSSODescriptor']['Extensions']['mduiUIInfo']['mduiLogo'];
                     }
                 }
+
+                // Insert / Update Data in Database
+                $flight = IDP::updateOrCreate(
+                    ['entityId' => $newentity['entityId']],
+                    [
+                        'name' => $newentity['name'], 
+                        'singleSignOnServiceUrl' => $newentity['singleSignOnServiceUrl'],
+                        'singleLogoutServiceUrl' => $newentity['singleSignOnServiceUrl'],
+                        'x509cert' => $newentity['x509cert'],
+                        'logo' => $newentity['logo'],
+                    ]
+                );                
+
                 $entities[] = $newentity;
             }
         }
-        echo json_encode($entities,JSON_PRETTY_PRINT);
+        $bar->finish();
+        $this->newLine(1);
+
+        $this->info('Complete!');
+        // echo json_encode($entities,JSON_PRETTY_PRINT);
         exit();
     }
 }

@@ -9,16 +9,8 @@
     <div class="col-sm-4 col-sm-offset-4">
         <ul class="list-group"> 
             <a href="/idp/google/@if(isset(request()->redirect))?redirect={{request()->redirect}}@endif" class="list-group-item"><i style="margin-top: 4px;" class="fa fa-lock fa-lg fa-fw pull-right"></i><i class="fab fa-google fa-lg fa-fw"></i>&nbsp;Google Login</a>
-            <?php
-                $saml2_idps = config('saml2_settings.idps');
-                uasort($saml2_idps, function ($a, $b) {
-                    return strcmp($a['name'],$b['name']);
-                });
-            ?>
-            @foreach($saml2_idps as $school => $configuration)
-                @if (in_array($school, $enabled_idps))
-                    <a href="/saml2/wayf/{{$school}}@if(isset(request()->redirect))?redirect={{request()->redirect}}@endif" class="list-group-item"><i style="margin-top: 4px;" class="fa fa-lock fa-lg fa-fw pull-right"></i>{{$configuration['name']}}</a>
-                @endif
+            @foreach($idps as $idp)
+                <a href="/saml2/wayf/{{$idp->id}}@if(isset(request()->redirect))?redirect={{request()->redirect}}@endif" class="list-group-item"><i style="margin-top: 4px;" class="fa fa-lock fa-lg fa-fw pull-right"></i>{{$idp->name}}</a>
             @endforeach
             @if(config('app.demo.enabled'))
                 <a href="/idp/demo" class="list-group-item"><i style="margin-top: 4px;" class="fa fa-lock fa-lg fa-fw pull-right"></i>Demo (Guest) Login</a>
