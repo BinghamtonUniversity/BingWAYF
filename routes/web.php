@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Saml2Controller;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AppController;
 use App\HTTP\Middleware\SAML2Authentication;
 
 /* GENERIC STUFF */

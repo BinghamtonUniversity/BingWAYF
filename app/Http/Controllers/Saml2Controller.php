@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Libraries\SAML2AuthWrapper;
 use App\Models\User;
 use App\Models\IDP;
+use App\Models\UserIDP;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
@@ -143,13 +144,13 @@ class Saml2Controller extends Controller
                 $saml_attributes[$attribute_name] = $attribute_value[0];
             }
         }
-        if (env('IDP_DEBUG_'.$site,false)) {
+        if ($idp->debug === true) {
             echo '<h3>SAML Attributes</h3>';
             echo '<pre>'.print_r($saml_attributes,true).'</pre>';
-            // echo '<h3>SAML2 User</h3>';
-            // echo '<pre>'.print_r($saml2user,true).'</pre>';
-            // echo '<h3>SAML Last Message</h3>';
-            // echo '<pre>'.print_r($messageId,true).'</pre>';
+            echo '<h3>SAML2 User</h3>';
+            echo '<pre>'.print_r($saml2user,true).'</pre>';
+            echo '<h3>SAML Last Message</h3>';
+            echo '<pre>'.print_r($messageId,true).'</pre>';
             exit();
         }
 
@@ -161,20 +162,31 @@ class Saml2Controller extends Controller
         ];
 
         $m = new \Mustache_Engine;                                    
-        $user = User::where('unique_id', $m->render($data_map['unique_id'], $saml_attributes))
-            ->where(function ($query) use ($site) {
-                $query->where('idp',$site)->orWhereNull('idp');
-            })
-            ->first();
-        if ($user === null) {
+        $attributes = [
+            'unique_id' => $m->render($data_map['unique_id'], $saml_attributes),
+            'first_name' => $m->render($data_map['first_name'], $saml_attributes),
+            'last_name' => $m->render($data_map['last_name'], $saml_attributes),
+            'email' => $m->render($data_map['email'], $saml_attributes),
+        ];
+
+        $userIDP = UserIDP::where('unique_id',$attributes['unique_id'])->where('idp_id',$id)->first();
+        
+        if (!is_null($userIDP)) {
+            $user = User::where('id',$userIDP->user_id)->first();
+        } else {
             $user = new User();
-            $user->unique_id = $m->render($data_map['unique_id'], $saml_attributes);
+            $user->save();
+            $userIDP = new UserIDP(['user_id'=>$user->id,'idp_id'=>$id,'unique_id'=>$attributes['unique_id']]);
+            $userIDP->save();
         }
-        $user->first_name = $m->render($data_map['first_name'], $saml_attributes);
-        $user->last_name = $m->render($data_map['last_name'], $saml_attributes);
-        $user->email = $m->render($data_map['email'], $saml_attributes);
-        $user->idp = $site;
-        $user->last_login = now();
+
+        $userIDP->attributes = $saml_attributes;
+        $userIDP->last_login = now();
+
+        $userIDP->save();
+        $user->first_name = $attributes['first_name'];
+        $user->last_name = $attributes['last_name'];
+        $user->email = $attributes['email'];
         $user->save();
 
         Auth::login($user, true);
@@ -210,11 +222,11 @@ class Saml2Controller extends Controller
         $sessionIndex = $request->query('sessionIndex');
         $nameId = $request->query('nameId');
         $full_logout = true;
-        try {
-            $this->saml2Auth->logout($returnTo, $nameId, $sessionIndex); //will actually end up in the sls endpoint
-        } catch (\Exception $e) {
-            $full_logout = false;
-        }
+        // try {
+        //     $this->saml2Auth->logout($returnTo, $nameId, $sessionIndex); //will actually end up in the sls endpoint
+        // } catch (\Exception $e) {
+        //     $full_logout = false;
+        // }
         return view('logout',['full_logout' => $full_logout]);
     }
 

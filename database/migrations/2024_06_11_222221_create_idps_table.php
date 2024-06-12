@@ -21,6 +21,7 @@ return new class extends Migration
             $table->mediumtext('logo')->nullable()->default(null);
             $table->string('config')->json()->default('');
             $table->string('enabled')->boolean()->default(false);
+            $table->string('debug')->boolean()->default(false);
             $table->timestamps();
         });
     }

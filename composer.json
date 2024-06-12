@@ -11,6 +11,7 @@
         "laravel/sanctum": "^3.3",
         "laravel/socialite": "^5.14",
         "laravel/tinker": "^2.8",
+        "mustache/mustache": "^2.14",
         "onelogin/php-saml": "^4.2"
     },
     "require-dev": {

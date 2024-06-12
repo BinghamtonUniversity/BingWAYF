@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\UserIDP;
+
 
 class AppController extends Controller
 {
@@ -11,8 +14,9 @@ class AppController extends Controller
     }
 
     public function home(Request $request) {
-
-        return ['user'=>Auth::user()]);
+        $info = UserIDP::where('user_id',Auth::user()->id)->with('idp')->get();
+        // return $info;
+        return view('welcome',['info'=>$info]);
     }
 
 }

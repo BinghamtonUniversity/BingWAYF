@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
-    <meta name="author" content="Escher Labs, Inc.">
+    <meta name="author" content="Binghamton University">
     <link rel="icon"  type="image/png" href="/assets/icons/fontawesome/gray/32/address-book.png">
     <title>@yield('title') | BingWAYF</title>
     <!-- Bootstrap -->
@@ -51,11 +51,10 @@
                 @else Welcome! @endif
                 </a>
               @if(!is_null(Auth::user()))
-              <ul class="dropdown-menu">
-              <li  style="color:#ccc;" ><a href="/admin"><i class="fa fa-user-shield fa-fw"></i> Admin</a></li>
-                <li  style="color:#ccc;" ><a href="/logout"><i class="fa fa-times-circle fa-fw"></i> Logout</a></li>
-                
-              </ul>
+                <ul class="dropdown-menu">
+                  <li  style="color:#ccc;" ><a href="/admin"><i class="fa fa-user-shield fa-fw"></i> Admin</a></li>
+                  <li  style="color:#ccc;" ><a href="/logout"><i class="fa fa-times-circle fa-fw"></i> Logout</a></li>
+                </ul>
               @endif
             </li>
           </ul>

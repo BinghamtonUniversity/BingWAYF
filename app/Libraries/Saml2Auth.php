@@ -92,7 +92,7 @@ class Saml2Auth
      *
      * @return string|null If $stay is True, it return a string with the SLO URL + LogoutRequest + parameters
      */
-    function login($returnTo = null, $parameters = array(), $forceAuthn = false, $isPassive = false, $stay = false, $setNameIdPolicy = true)
+    function login($returnTo = null, $parameters = array(), $forceAuthn = false, $isPassive = false, $stay = false, $setNameIdPolicy = false)
     {
         $auth = $this->auth;
 
