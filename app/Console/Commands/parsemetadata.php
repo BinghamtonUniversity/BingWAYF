@@ -43,7 +43,7 @@ class parsemetadata extends Command
         }
         $data = json_decode(json_encode($doc),true);
  
-        $bar = $this->output->createProgressBar(count($data));
+        $bar = $this->output->createProgressBar(count($data['EntityDescriptor']));
         $bar->start();
         $entities = [];
         foreach($data['EntityDescriptor'] as $entity) {
