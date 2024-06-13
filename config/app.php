@@ -159,6 +159,8 @@ return [
         /*
          * Package Service Providers...
          */
+        Laravel\Passport\PassportServiceProvider::class,
+        OpenIDConnect\Laravel\PassportServiceProvider::class,
 
         /*
          * Application Service Providers...

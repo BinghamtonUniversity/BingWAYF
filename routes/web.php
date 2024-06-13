@@ -13,7 +13,7 @@ Route::middleware([SAML2Authentication::class])->group(function () {
     Route::get('/admin/{page?}', [AdminController::class, 'admin']);
 });
 
-Route::get('/login', [Saml2Controller::class, 'wayf'])->name('wayf_login');
+Route::get('/login', [Saml2Controller::class, 'wayf'])->name('login');
 Route::any('/idp/demo', [DemoController::class, 'list']);
 Route::get('/idp/google', [Saml2Controller::class, 'google_redirect']);
 Route::get('/idp/google/callback', [Saml2Controller::class, 'google_callback']);
