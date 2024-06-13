@@ -4,6 +4,7 @@ namespace App\Entities;
 use League\OAuth2\Server\Entities\Traits\EntityTrait;
 use OpenIDConnect\Claims\Traits\WithClaims;
 use OpenIDConnect\Interfaces\IdentityEntityInterface;
+use App\Models\User;
 
 class IdentityEntity implements IdentityEntityInterface
 {
@@ -22,7 +23,10 @@ class IdentityEntity implements IdentityEntityInterface
     public function setIdentifier($identifier): void
     {
         $this->identifier = $identifier;
-        $this->user = User::findOrFail($identifier);
+        $this->user = User::where('id',$identifier)->first();
+        if (is_null($this->user)) {
+            throw new \Exception('User Not Found');
+        }
     }
 
     /**
@@ -32,6 +36,10 @@ class IdentityEntity implements IdentityEntityInterface
     {
         return [
             'email' => $this->user->email,
+            'given_name' => $this->user->first_name,
+            'family_name' => $this->user->last_name,
+            'name' => $this->user->first_name.' '.$this->user->last_name,
         ];
     }
 }
+
