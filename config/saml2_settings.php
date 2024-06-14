@@ -180,15 +180,15 @@ Srwk3Y/qszZ6IbylWUnZf0c=
 
         // Indicates whether the <samlp:AuthnRequest> messages sent by this SP
         // will be signed.              [The Metadata of the SP will offer this info]
-        'authnRequestsSigned' => false,
+        'authnRequestsSigned' => true,
 
         // Indicates whether the <samlp:logoutRequest> messages sent by this SP
         // will be signed.
-        'logoutRequestSigned' => false,
+        'logoutRequestSigned' => true,
 
         // Indicates whether the <samlp:logoutResponse> messages sent by this SP
         // will be signed.
-        'logoutResponseSigned' => false,
+        'logoutResponseSigned' => true,
 
         /* Sign the Metadata
          False || True (use sp certs) || array (
