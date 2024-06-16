@@ -10,6 +10,7 @@ window.app = {
 window.templates = {
     main:''
 };
+window.forms = [];
 
 var ractive = Ractive({
     target: '#main_target',
@@ -30,9 +31,9 @@ app.update = function(newdata) {
     }
 };
 
-app.get = function(method,{},callback_success,error_callback) {
+app.get = function(route,{},callback_success,error_callback) {
     $.ajax({
-        url:'handler?action='+method,
+        url:route,
         success:function(data){callback_success(data)},
         error:function(data){
             if (typeof error_callback !== 'undefined') {
@@ -42,7 +43,7 @@ app.get = function(method,{},callback_success,error_callback) {
     })
 }
 
-app.post = function(method, data, success_callback, error_callback) {
+app.post = function(route, data, success_callback, error_callback) {
     toastr.info("Processing... Please Wait!")
     if (typeof data.username !== 'undefined') {
         data.username = data.username.trim();
@@ -50,7 +51,7 @@ app.post = function(method, data, success_callback, error_callback) {
     $.ajax({
         dataType: "json",
         method: "POST",
-        url: 'handler?action='+method,
+        url: route,
         data: data,
         success: function(data,status,xhr) {
             toastr.remove()

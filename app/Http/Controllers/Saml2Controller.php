@@ -29,15 +29,17 @@ class Saml2Controller extends Controller
 
     public function wayf(Request $request) {
         if(!Auth::user()){
-            $idps = IDP::orderBy('id','asc')->get();
             $enabled_idps = explode(',',config('saml2_settings.enabled_idps'));
             return view('wayf',['data'=>[
-                'idps'=> $idps,
                 'redirect'=> $request->redirect
             ]]);
         } else {
             return redirect('/');
         }  
+    }
+
+    public function get_idps(Request $request) {
+        return IDP::orderBy('id','asc')->select('name','id')->get();
     }
 
     public function wayfcallback($id) {

@@ -9,7 +9,18 @@
     <meta name="author" content="Binghamton University">
     <title>@yield('title') | BingWAYF</title>
     <!-- Bootstrap -->
-    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+         <!-- Custom Light / Dark Mode CSS -->
+    <script>
+      if (window.matchMedia('(prefers-color-scheme: dark)').media === 'not all') {
+        document.documentElement.style.display = 'none';
+        document.head.insertAdjacentHTML(
+          'beforeend',
+          '<link rel="stylesheet" href="/light.css" onload="document.documentElement.style.display = \'\'">',
+        );
+      }
+    </script>
+    <link rel="stylesheet" href="/assets/css/bootstrap.darkly.min.css" media="(prefers-color-scheme: dark)" />
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" media="(prefers-color-scheme: light)" />
     <link href="/assets/css/bingwayf.css" rel="stylesheet">
     <!-- Font Awesome -->
     <!-- <link href="/assets/css/font-awesome.min.css" rel="stylesheet"> -->
@@ -35,8 +46,8 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/" style="background: rgb(51, 85, 136);color:white;padding: 0px 0px 0px 25px;">
-            <h3 style="color:#fff;margin-top:12px;"><i class="fa fa-address-book"></i> BingWAYF</h3>
+          <a class="navbar-brand" href="/" style="background:#005A43;color:white;padding: 0px 0px 0px 25px;">
+            <h3 style="color:#fff;margin-top:12px;"><i class="fa fa-share"></i> BingWAYF</h3>
           </a>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -74,7 +85,7 @@
     background-color: #ddd; color:#555;
     padding: 5px 20px;">
     <i class="far fa-copyright fa-fw"></i> {{ now()->year }} Binghamton University</a>&nbsp;|
-    <a style="color:#555;" href="https://www.binghamton.edu/its/about/governance/policies/privacy.html"><i class="fas fa-shield-alt fa-lg fa-fw"></i>&nbsp;Privacy</a>&nbsp;|
+    <a style="color:#555;" href="https://www.binghamton.edu/its/about/policies/binghamton-university-privacy-policy.html"><i class="fas fa-shield-alt fa-lg fa-fw"></i>&nbsp;Privacy</a>&nbsp;|
     <a style="color:#555;" href="https://github.com/BinghamtonUniversity/BingWAYF"><i class="fab fa-github fa-lg fa-fw"></i>&nbsp;Github</a>&nbsp;|
     </div>
     </footer>
