@@ -30,9 +30,14 @@ class Saml2Controller extends Controller
     public function wayf(Request $request) {
         if(!Auth::user()){
             $enabled_idps = explode(',',config('saml2_settings.enabled_idps'));
-            return view('wayf',['data'=>[
+
+            $contents = view('wayf',['data'=>[
                 'redirect'=> urlencode($request->redirect)
             ]]);
+            return response($contents)
+                ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+                ->header('Pragma', 'no-cache')
+                ->header('Expires', '0');        
         } else {
             return redirect('/');
         }  

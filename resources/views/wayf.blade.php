@@ -92,12 +92,6 @@ app.click('.idp-link',function(event) {
         window.location = '/saml2/wayf/' + idpid + ((app.data.redirect != '')?'?redirect='+app.data.redirect:'');
 }   ,2000);
 })
-
-window.addEventListener("beforeunload", function (e) {
-    app.data.selected_idp = null;
-    app.update();
-});
-
 </script>
 @endsection
 
