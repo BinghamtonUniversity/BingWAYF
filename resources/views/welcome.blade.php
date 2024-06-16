@@ -3,32 +3,48 @@
 @section('title', 'WAYF')
 
 @section('content')
-    <h1 style="text-align:center;">Welcome {{Auth::user()->first_name}} {{Auth::user()->last_name}}!</h1>
+    <div id="main_target"></div>
+@endsection
 
+@section('data')
+<script>
+app.data = <?php echo json_encode($data); ?>;
+</script>
+@endsection
+
+@section('scripts')
+<script>
+window.templates.main = `
+    <h1 style="text-align:center;">Welcome @{{user.first_name}} @{{user.last_name}}!</h1>
     <div class="row">
         <div class="col-sm-offset-3 col-sm-6 ">
             <div class="well">
                 <h3 style="text-align:center;margin-top:0px;padding-top:0px;">My User Info</h3>
-                <label>User ID: </label> {{Auth::user()->id}}<br>
-                <label>First Name:</label> {{Auth::user()->first_name}}<br>
-                <label>Last Name:</label> {{Auth::user()->last_name}}<br>
-                <label>Email:</label> {{Auth::user()->email}}<br>
+                <label>User ID: </label> @{{user.id}}<br>
+                <label>First Name:</label> @{{user.first_name}}<br>
+                <label>Last Name:</label> @{{user.last_name}}<br>
+                <label>Email:</label> @{{user.email}}<br>
             </div>
             <div class="well">
-                @foreach ($info as $idp) 
-                    <h3 style="text-align:center;margin-top:0px;padding-top:0px;">My IDPs</h3>
-                    <label>IDP:</label> {{$idp->idp->name}}<br>
-                    <label>Last Login:</label> {{$idp->last_login}}<br>
-                    @if(!is_null($idp->idp->logo)) 
-                        <label>Logo:</label> {{$idp->idp->logo}}
-                    @endif
-                    <label>Unique ID:</label> {{$idp->unique_id}}<br>
-                    @foreach($idp->attributes as $key => $value) 
-                        <label>{{$key}}:</label> {{$value}}<br>
-                    @endforeach
+                <h3 style="text-align:center;margin-top:0px;padding-top:0px;">My IDPs</h3>
+                @{{#info}} 
+                    <label>IDP:</label> @{{idp.name}}<br>
+                    <label>Last Login:</label> @{{last_login}}<br>
+                    @{{#idp.logo}}
+                        <label>Logo:</label> @{{idp.logo}}<br>
+                    @{{/idp.logo}}
+                    <label>Unique ID:</label> @{{unique_id}}<br>
+                    @{{#attributes:key}} 
+                        <label>@{{key}}:</label> @{{.}}<br>
+                    @{{/attributes:key}} 
                     <hr>
-                @endforeach
+                @{{/info}}
             </div>
         </div>
     </div>
+`;
+ractive.resetTemplate(window.templates.main);
+app.update();
+</script>
 @endsection
+

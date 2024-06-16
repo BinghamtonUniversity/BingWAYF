@@ -15,8 +15,7 @@ class AppController extends Controller
 
     public function home(Request $request) {
         $info = UserIDP::where('user_id',Auth::user()->id)->with('idp')->get();
-        // return $info;
-        return view('welcome',['info'=>$info]);
+        return view('welcome',['data'=>['info'=>$info,'user'=>Auth::user()]]);
     }
 
 }
