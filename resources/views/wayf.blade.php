@@ -68,7 +68,7 @@ app.data.loading = true;
 app.update();
 
 app.form('filter_form','#filter-form').on('change',function(event){
-    var filter = event.form.get().filter;
+    var filter = event.form.get().filter.toLowerCase();
     app.data.filtered_idps = _.filter(app.data.idps,function(o) {
         return _.toLower(_.deburr(o.name)).includes(filter)
     })
