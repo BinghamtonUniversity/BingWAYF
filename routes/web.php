@@ -9,7 +9,7 @@ use App\HTTP\Middleware\SAML2Authentication;
 
 
 /* GENERIC STUFF */
-Route::middleware(['auth','auth.session'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/', [AppController::class, 'home']);
     Route::get('/admin/{page?}', [AdminController::class, 'admin']);
 });
@@ -51,7 +51,7 @@ Route::group([
     Route::get('/authorize', [
         'uses' => 'AuthorizationController@authorize',
         'as' => 'authorizations.authorize',
-        'middleware' => ['auth','auth.session','web'],
+        'middleware' => ['auth','web'],
     ]);
     
     $guard = config('passport.guard', null);
