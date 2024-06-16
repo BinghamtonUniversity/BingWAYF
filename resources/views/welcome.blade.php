@@ -1,6 +1,6 @@
 @extends('default.default')
 
-@section('title', 'WAYF')
+@section('title', 'My Profile')
 
 @section('content')
     <div id="main_target"></div>

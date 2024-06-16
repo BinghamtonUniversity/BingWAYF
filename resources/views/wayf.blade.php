@@ -1,6 +1,6 @@
 @extends('default.default')
 
-@section('title', 'WAYF')
+@section('title', 'Login')
 
 @section('content')
 <div id="main_target"></div>
@@ -51,7 +51,7 @@ window.templates.main = `
                 <div class="alert alert-success">
                 <center>
                     Redirecting to ... <br>
-                    @{{#selected_idp.logo}}<img src="@{{selected_idp.logo}}" style="max-width:200px;">@{{/selected_idp.logo}}<br>
+                    @{{#selected_idp.logo}}<img src="@{{selected_idp.logo}}" style="max-height:200px;max-width:400px;">@{{/selected_idp.logo}}<br>
                     <b>@{{selected_idp.name}}</b>
                 <center>
                 </div>
