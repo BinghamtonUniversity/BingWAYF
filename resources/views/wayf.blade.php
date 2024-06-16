@@ -24,10 +24,11 @@ window.forms.filter_form = {
 window.templates.main = `
 
 <div class="row">
+    <div class="col-sm-12">
     <center><h1 style="text-align:center;">Binghamton University's Federated Login</h1></center>
     @{{^selected_idp}}
     <div class="row">
-        <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2" style="margin-top:20px;">
+        <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-12" style="margin-top:20px;">
             <div id="filter-form"></div>
             <div style="max-height:300px;overflow:scroll;margin-bottom:20px;">
                 <ul class="list-group"> 
@@ -58,6 +59,7 @@ window.templates.main = `
         </div>
     </div>
     @{{/selected_idp}}
+    </div>
 </div>
 `;
 ractive.resetTemplate(window.templates.main);
