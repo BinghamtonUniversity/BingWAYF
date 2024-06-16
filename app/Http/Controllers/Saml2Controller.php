@@ -31,7 +31,7 @@ class Saml2Controller extends Controller
         if(!Auth::user()){
             $enabled_idps = explode(',',config('saml2_settings.enabled_idps'));
             return view('wayf',['data'=>[
-                'redirect'=> $request->redirect
+                'redirect'=> urlencode($request->redirect)
             ]]);
         } else {
             return redirect('/');

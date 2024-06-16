@@ -51,7 +51,7 @@ Route::group([
     Route::get('/authorize', [
         'uses' => 'AuthorizationController@authorize',
         'as' => 'authorizations.authorize',
-        'middleware' => ['auth','web'],
+        'middleware' => ['auth','auth.session','web'],
     ]);
     
     $guard = config('passport.guard', null);
