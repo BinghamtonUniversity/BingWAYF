@@ -87,7 +87,7 @@ class parsemetadata extends Command
                     }                    
                     foreach($entity['IDPSSODescriptor']['SingleLogoutService'] as $descriptor) {
                         if (isset($descriptor['@attributes']['Binding']) && $descriptor['@attributes']['Binding'] === 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect') {
-                            $newentity['singleLogoutService'] = $descriptor['@attributes']['Location'];
+                            $newentity['singleLogoutServiceUrl'] = $descriptor['@attributes']['Location'];
                         }
                     }
                 }

@@ -25,22 +25,27 @@ window.templates.main = `
 
 <div class="row">
     <center><h1 style="text-align:center;">Binghamton University's Federated Login</h1></center>
-    <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2" style="margin-top:20px;">
-        <div id="filter-form"></div>
-        <div style="max-height:300px;overflow:scroll;margin-bottom:20px;">
-            <ul class="list-group"> 
-                @{{#loading}}
-                    <li class="list-group-item">Loading ...</li>
-                @{{/loading}}
-                @{{#filtered_idps}}
-                    <li data-idpid="@{{id}}" class="list-group-item idp-link" style="cursor:pointer;"><i style="margin-top:4px;" class="fa fa-lock fa-lg fa-fw pull-right"></i>@{{name}}</li>
-                @{{/filtered_idps}}
-            </ul>
-        </div>
-    </div>
+    @{{^selected_idp}}
     <div class="row">
         <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2" style="margin-top:20px;">
-            @{{#selected_idp}}
+            <div id="filter-form"></div>
+            <div style="max-height:300px;overflow:scroll;margin-bottom:20px;">
+                <ul class="list-group"> 
+                    @{{#loading}}
+                        <li class="list-group-item">Loading ...</li>
+                    @{{/loading}}
+                    @{{#filtered_idps}}
+                        <li data-idpid="@{{id}}" class="list-group-item idp-link" style="cursor:pointer;"><i style="margin-top:4px;" class="fa fa-lock fa-lg fa-fw pull-right"></i>@{{name}}</li>
+                    @{{/filtered_idps}}
+                </ul>
+            </div>
+            <center><div class="alert alert-info">To log in, please select your organization's identity provider<br> from the list above</div></center>
+        </div>
+    </div>
+    @{{/selected_idp}}
+    @{{#selected_idp}}
+    <div class="row">
+        <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2" style="margin-top:20px;">
             <div class="selected-idp">
                 <div class="alert alert-success">
                 <center>
@@ -50,12 +55,9 @@ window.templates.main = `
                 <center>
                 </div>
             </div>
-            @{{/selected_idp}}
-            @{{^selected_idp}}
-                <center><div>To log in, please select your organization's identity provider<br> from the list above</div></center>
-            @{{/selected_idp}}
         </div>
     </div>
+    @{{/selected_idp}}
 </div>
 `;
 ractive.resetTemplate(window.templates.main);
@@ -87,11 +89,14 @@ app.click('.idp-link',function(event) {
         app.update();
     });
     setTimeout(function() {
-        app.data.selected_idp = null;
-        app.update();
         window.location = '/saml2/wayf/' + idpid + ((app.data.redirect != '')?'?redirect='+app.data.redirect:'');
 }   ,2000);
 })
+
+window.addEventListener("beforeunload", function (e) {
+    app.data.selected_idp = null;
+    app.update();
+});
 
 </script>
 @endsection
