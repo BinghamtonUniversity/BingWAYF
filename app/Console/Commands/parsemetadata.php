@@ -69,6 +69,10 @@ class parsemetadata extends Command
                 }
                 // Set Single-Sign-On URL
                 if (isset($entity['IDPSSODescriptor']['SingleSignOnService'])) {
+                    // Convert non list to list
+                    if (!array_is_list($entity['IDPSSODescriptor']['SingleSignOnService'])) {
+                        $entity['IDPSSODescriptor']['SingleSignOnService'] = [$entity['IDPSSODescriptor']['SingleSignOnService']];
+                    }
                     foreach($entity['IDPSSODescriptor']['SingleSignOnService'] as $descriptor) {
                         if (isset($descriptor['@attributes']['Binding']) && $descriptor['@attributes']['Binding'] === 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect') {
                             $newentity['singleSignOnServiceUrl'] = $descriptor['@attributes']['Location'];
@@ -77,6 +81,10 @@ class parsemetadata extends Command
                 }
                 // Set Single-Logout URL
                 if (isset($entity['IDPSSODescriptor']['SingleLogoutService'])) {
+                    // Convert non list to list
+                    if (!array_is_list($entity['IDPSSODescriptor']['SingleLogoutService'])) {
+                        $entity['IDPSSODescriptor']['SingleLogoutService'] = [$entity['IDPSSODescriptor']['SingleLogoutService']];
+                    }                    
                     foreach($entity['IDPSSODescriptor']['SingleLogoutService'] as $descriptor) {
                         if (isset($descriptor['@attributes']['Binding']) && $descriptor['@attributes']['Binding'] === 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect') {
                             $newentity['singleLogoutService'] = $descriptor['@attributes']['Location'];

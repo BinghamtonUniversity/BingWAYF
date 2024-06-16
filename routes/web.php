@@ -29,7 +29,7 @@ Route::get('/oauth/userinfo', [OAuthController::class, 'userinfo'])->name('openi
 
 /* SAML Stuff */
 Route::prefix('/saml2')->group(function () {
-    Route::get('/idps',[Saml2Controller::class, 'get_idps']);
+    Route::get('/idps/{idp?}',[Saml2Controller::class, 'get_idps']);
     Route::get('/metadata',[Saml2Controller::class, 'metadata'])->name('saml_metadata');
     Route::post('/acs',[Saml2Controller::class, 'acs'])->name('saml_acs');
     Route::get('/sls',[Saml2Controller::class, 'sls'])->name('saml_sls');

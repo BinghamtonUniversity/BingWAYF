@@ -38,8 +38,12 @@ class Saml2Controller extends Controller
         }  
     }
 
-    public function get_idps(Request $request) {
-        return IDP::orderBy('id','asc')->select('name','id')->get();
+    public function get_idps(Request $request, IDP $idp = null) {
+        if (!is_null($idp)) {
+            return $idp;
+        } else {
+            return IDP::orderBy('id','asc')->select('name','id')->get();
+        }
     }
 
     public function wayfcallback($id) {
