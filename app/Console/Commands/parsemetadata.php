@@ -126,7 +126,7 @@ class parsemetadata extends Command
                     [
                         'name' => $newentity['name'], 
                         'singleSignOnServiceUrl' => $newentity['singleSignOnServiceUrl'],
-                        'singleLogoutServiceUrl' => $newentity['singleSignOnServiceUrl'],
+                        'singleLogoutServiceUrl' => $newentity['singleLogoutServiceUrl'],
                         'x509cert' => $newentity['x509cert'],
                         'logo' => $newentity['logo'],
                     ]

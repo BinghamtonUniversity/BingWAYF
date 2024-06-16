@@ -7,7 +7,6 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="Binghamton University">
-    <link rel="icon"  type="image/png" href="/assets/icons/fontawesome/gray/32/address-book.png">
     <title>@yield('title') | BingWAYF</title>
     <!-- Bootstrap -->
     <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
@@ -80,8 +79,15 @@
     </div>
     </footer>
     <!-- Footer -->
-
     <script src='/assets/js/vendor/jquery.min.js'></script>
     <script src="/assets/js/vendor/bootstrap.min.js"></script>
+    <script src="/assets/js/vendor/lodash.min.js">
+    <script>_.findWhere = _.find; _.where = _.filter;_.pluck = _.map;_.contains = _.includes;</script>
+    <script src="/assets/js/vendor/toastr.min.js"></script>
+    <script src="/assets/js/vendor/gform_bootstrap.js"></script>
+    <script src="/assets/js/vendor/ractive.min.js"></script>
+    <script src="/assets/js/_framework.js"></script>
+    @yield('data')
+    @yield('scripts')
   </body>
 </html>
