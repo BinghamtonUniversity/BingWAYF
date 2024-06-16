@@ -10,7 +10,7 @@ use App\HTTP\Middleware\SAML2Authentication;
 
 /* GENERIC STUFF */
 // Route::group(['middleware'=>['saml2.auth']], function () use ($router) {
-Route::middleware('saml2.auth')->group(function () {
+Route::middleware(['saml2.auth','auth','auth.session'])->group(function () {
     Route::get('/', [AppController::class, 'home']);
     Route::get('/admin/{page?}', [AdminController::class, 'admin']);
 });
