@@ -45,7 +45,7 @@ Route::group([
     'as' => 'passport.',
     'prefix' => config('passport.path', 'oauth'),
     'namespace' => '\Laravel\Passport\Http\Controllers',
-], function () {
+], function () use ($guard) {
 
     Route::post('/token', [
         'uses' => 'AccessTokenController@issueToken',
