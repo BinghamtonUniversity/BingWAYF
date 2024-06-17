@@ -21,6 +21,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Set max cookie lifetime to 30 minutes
+        ini_set('session.cookie_lifetime', 1800);
         Passport::useClientModel(Client::class);
     }
 }

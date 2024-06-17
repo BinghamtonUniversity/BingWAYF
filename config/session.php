@@ -2,8 +2,6 @@
 
 use Illuminate\Support\Str;
 
-ini_set('session.cookie_lifetime', 1800);
-
 return [
 
     /*
