@@ -36,7 +36,7 @@ app.get = function(url,callback_success,callback_error) {
         type: "GET",
         url: url,
         success:function(data) {
-            if (typeof callback_success !== 'undefined') {callback_success(data);}
+            if (callback_success !== undefined) {callback_success(data);}
         },
         error:function(data) {
             if (typeof data.responseJSON !== 'undefined' && typeof data.responseJSON.error !== 'undefined') {
@@ -56,7 +56,7 @@ app.post = function(url,data,callback_success,callback_error) {
         data: JSON.stringify(data),
         success:function(data) {
             toastr.success("Created Successfully")
-            if (typeof callback_success !== 'undefined') {callback_success(data);}
+            if (callback_success !== undefined) {callback_success(data);}
         },
         error:function(data) {
             toastr.error("An Error Occurred During Creation")
