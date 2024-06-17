@@ -36,9 +36,11 @@ Route::prefix('/saml2')->group(function () {
     Route::get('/wayf/{id}', [Saml2Controller::class, 'wayfcallback'])->name('saml_wayf');
 });
 
-Route::get('/oauth/profile', [OAuthController::class, 'profile'])->name('openid.userinfo');;
-
 /* OAuth Passport Stuff */
+$guard = config('passport.guard', null);
+Route::get('/oauth/profile', [OAuthController::class, 'profile'])->name('openid.userinfo')
+    ->middleware(['web', $guard ? 'auth:'.$guard : 'auth']);
+
 Route::group([
     'as' => 'passport.',
     'prefix' => config('passport.path', 'oauth'),
@@ -56,9 +58,7 @@ Route::group([
         'as' => 'authorizations.authorize',
         'middleware' => ['auth','auth.session','web'],
     ]);
-    
-    $guard = config('passport.guard', null);
-    
+        
     Route::middleware(['web', $guard ? 'auth:'.$guard : 'auth'])->group(function () {
         Route::post('/token/refresh', [
             'uses' => 'TransientTokenController@refresh',
