@@ -24,9 +24,6 @@ class OAuthController extends Controller
         $identityEntity = new IdentityEntity();
         $identityEntity->setIdentifier($userid);
         return $identityEntity->getClaims();
-
-        $info = UserIDP::where('user_id',$userid)->with('idp')->first();
-        return $info;
     }
 
 }
