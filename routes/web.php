@@ -58,20 +58,21 @@ Route::prefix('/saml2')->group(function () {
 });
 
 /* OAuth Passport Stuff */
-$guard = config('passport.guard', null);
 Route::get('/.well-known/openid-configuration', [OAuthController::class, 'openid_discovery'])
     ->name('openid.discovery')
     ->middleware('allowallorigin');
-Route::get('/oauth/jwks', JwksController::class)->name('openid.jwks');
-Route::get('/oauth/profile', [OAuthController::class, 'profile'])->name('openid.userinfo')
-    ->middleware(['allowallorigin','web','auth']);
+Route::get('/oauth/jwks', JwksController::class)
+    ->name('openid.jwks')
+    ->middleware(['allowallorigin']);
+Route::get('/oauth/profile', [OAuthController::class, 'profile'])
+    ->name('openid.userinfo')
+    ->middleware(['allowallorigin']);
 
 Route::group([
     'as' => 'passport.',
     'prefix' => config('passport.path', 'oauth'),
     'namespace' => '\Laravel\Passport\Http\Controllers',
-], function () use ($guard) {
-
+], function () {
     Route::post('/token',[AccessTokenController::class,'issueToken'])
         ->middleware('throttle','allowallorigin')->name('token');           
     
