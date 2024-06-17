@@ -36,7 +36,7 @@ Route::prefix('/saml2')->group(function () {
     Route::get('/wayf/{id}', [Saml2Controller::class, 'wayfcallback'])->name('saml_wayf');
 });
 
-Route::get('/oauth/userinfo', [OAuthController::class, 'userinfo'])->name('openid.userinfo');;
+Route::get('/oauth/profile', [OAuthController::class, 'profile'])->name('openid.userinfo');;
 
 /* OAuth Passport Stuff */
 Route::group([

@@ -13,7 +13,7 @@ class OAuthController extends Controller
     public function __construct() {
     }
 
-    public function userinfo(Request $request) {
+    public function profile(Request $request) {
         if (is_null($request->user())) {
             return response()->json(['error' => 'Not authorized.'],403);
         }
