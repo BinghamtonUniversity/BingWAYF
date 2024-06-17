@@ -7,9 +7,20 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0" />
-    <link rel="icon"  type="image/png" href="/assets/icons/fontawesome/gray/32/address-book.png">
-    <title>Admin | BingWAYF</title>
-    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+    <title>BingWAYF | {{$title}}</title>
+    <!-- Custom Light / Dark Mode CSS -->
+    <script>
+      if (window.matchMedia('(prefers-color-scheme: dark)').media === 'not all') {
+        document.documentElement.style.display = 'none';
+        document.head.insertAdjacentHTML(
+          'beforeend',
+          '<link rel="stylesheet" href="/light.css" onload="document.documentElement.style.display = \'\'">',
+        );
+      }
+    </script>
+    <link rel="stylesheet" href="/assets/css/bootstrap.darkly.min.css" media="(prefers-color-scheme: dark)" />
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" media="(prefers-color-scheme: light)" />
+    <!-- AFTER -->
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <!--<link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">-->
     <!-- Custom styles for this template -->
@@ -28,6 +39,7 @@
     <link data-name="vs/editor/editor.main" rel="stylesheet" href="/assets/js/vendor/vs/editor/editor.main.css">
   </head>
   <body>
+    <style>@media (prefers-color-scheme: dark) {}</style>
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -37,8 +49,8 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/" style="background: #d9534f;color:white;padding: 0px 0px 0px 25px;">
-            <h3 style="color:#fff;margin-top:12px;"><i class="fa fa-address-book"></i> BingWAYF</h3>
+          <a class="navbar-brand" href="/" style="background:#005A43;color:white;padding: 0px 0px 0px 25px;">
+            <h3 style="color:#fff;margin-top:12px;"><i class="fa fa-share"></i> BingWAYF</h3>
           </a>
             <ul class="nav navbar-nav  hidden-xs">
                 <li><a href="#"><h4 style="margin:0">{{$title}}</h4></a></li>
@@ -64,94 +76,53 @@
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right visible-xs-block">
-            @can('manage','App\User')
             <li><a href="/admin/users"><i class="fa fa-user fa-fw"></i>&nbsp; Users</a></li>
-            @endcan
-            @can('manage','App\Team')
-            <li><a href="/admin/teams"><i class="fa fa-users fa-fw"></i>&nbsp; Teams</a></li>
-            @endcan
-            @can('manage','App\Scenario')
-            <li><a href="/admin/scenarios"><i class="fa fa-notes-medical fa-fw"></i>&nbsp; Scenarios</a></li>
-            @endcan
-            @can('manage_product','App\Library')
-            <li><a href="/admin/products" ><i class="fa fa-pills fa-fw"></i>&nbsp; Products</a></li>
-            @endcan
-            @can('manage_prescriber','App\Library')
-            <li><a href="/admin/prescribers" ><i class="fa fa-user-md fa-fw"></i>&nbsp; Providers</a></li>
-            @endcan
-            @can('manage_solution','App\Library')
-            <li><a href="/admin/solutions" ><i class="fa fa-syringe fa-fw"></i>&nbsp; Solutions</a></li>
-            <li><a href="/admin/additives" ><i class="fa fa-plus fa-fw"></i>&nbsp; Solution Additives</a></li>
-            @endcan
-            @can('manage_lab','App\Library')
-            <li><a href="/admin/labs" ><i class="fa fa-flask fa-fw"></i>&nbsp; Labs</a></li>
-            @endcan
+            <li><a href="/admin/idps"><i class="fa fa-users fa-fw"></i>&nbsp; IDPs</a></li>
+            <li><a href="/admin/oauth"><i class="fa fa-notes-medical fa-fw"></i>&nbsp; OAuth</a></li>
+            <li><a href="/admin/apps"><i class="fa fa-notes-medical fa-fw"></i>&nbsp; Apps</a></li>
           </ul>
         </div>
       </div>
     </nav>
     <div class="col-sm-3 col-md-2 sidebar">
-
       <ul class="nav nav-sidebar">
-        @can('manage','App\User')
         <li class="@if($page=='users') active @endif"><a href="/admin/users"><i class="fa fa-user fa-fw"></i>&nbsp; Users</a></li>
-        @endcan
-        @can('manage','App\Team')
-        <li class="@if($page=='teams' || $page=='members' || $page=='notes' || $page=='messages') active @endif"><a href="/admin/teams"><i class="fa fa-users fa-fw"></i>&nbsp; Teams</a></li>
-        @endcan
-        @can('manage','App\Scenario')
-        <li class="@if($page=='scenarios') active @endif"><a href="/admin/scenarios"><i class="fa fa-notes-medical fa-fw"></i>&nbsp; Scenarios</a></li>
-        @endcan
-        @can('manage_product','App\Library')
-        <li class="@if($page=='products') active @endif"><a href="/admin/products" ><i class="fa fa-pills fa-fw"></i>&nbsp; Products</a></li>
-        @endcan
-        @can('manage_prescriber','App\Library')
-        <li class="@if($page=='prescribers') active @endif"><a href="/admin/prescribers" ><i class="fa fa-user-md fa-fw"></i>&nbsp; Providers</a></li>
-        @endcan
-        @can('manage_solution','App\Library')
-        <li class="@if($page=='solutions') active @endif"><a href="/admin/solutions" ><i class="fa fa-syringe fa-fw"></i>&nbsp; Solutions</a></li>
-        <li><a href="/admin/additives" ><i class="fa fa-plus fa-fw"></i>&nbsp; Solution Additives</a></li>
-        @endcan
-        @can('manage_lab','App\Library')
-        <li class="@if($page=='labs') active @endif"><a href="/admin/labs" ><i class="fa fa-flask fa-fw"></i>&nbsp; Labs</a></li>
-        @endcan
+        <li class="@if($page=='idps') active @endif"><a href="/admin/idps"><i class="fa fa-users fa-fw"></i>&nbsp; IDPs</a></li>
+        <li class="@if($page=='oauth') active @endif"><a href="/admin/oauth"><i class="fa fa-notes-medical fa-fw"></i>&nbsp; OAuth</a></li>
+        <li class="@if($page=='apps') active @endif"><a href="/admin/apps" ><i class="fa fa-pills fa-fw"></i>&nbsp; Apps</a></li>
       </ul>
     </div>
     <div class="container-fluid" id="main-container">
       <div class="row">
         <div class="col-sm-12 admin-main">
-            <div id="content">
-              <div id="dataGrid"></div>
-            </div>
+          <div id="content">
+            @if(isset($help))
+                <div class="alert alert-info">{{$help}}</div>
+            @endif
+            <div id="adminDataGrid"></div>
+            <style>
+            div#adminDataGrid > div.well > div {
+                /* Make All Datagrid Stuff Scrollable Hack */
+                overflow: scroll !important;
+            }
+            </style>
+          </div>
         </div>
       </div>
     </div>
     <script src='/assets/js/vendor/jquery.min.js'></script>
     <script src="/assets/js/vendor/bootstrap.min.js"></script>
-    <script src="/assets/js/vendor/lodash.min.js"></script>
+    <script src="/assets/js/vendor/lodash.min.js">
     <script>_.findWhere = _.find; _.where = _.filter;_.pluck = _.map;_.contains = _.includes;</script>
-    <script src='/assets/js/vendor/hogan.min.js'></script>
-    <script src='/assets/js/vendor/toastr.min.js'></script> 
-    <script src='/assets/js/vendor/gform_bootstrap.min.js'></script> 
-    <script src="/assets/js/admin/fields.js"></script>
-    <script src="/assets/js/admin/ajax_handler.js"></script>
-    <script src='/assets/js/vendor/berry.full.js'></script> 
-    <script src='/assets/js/vendor/bootstrap.full.berry.js'></script> 
-    <script src='/assets/js/vendor/berrytables.full.js'></script> 
-    <script src="/assets/js/admin/libs.js"></script>
-    <script src="/assets/js/admin/admin.js"></script>
-<script>
-
-this.app=ajax;
-this.data = {};
-page = "{{ $page }}";
-if (page!=='') {
-    id = {{ is_null($id)?"null":$id }};
-    this.app.get(page,{id:id},function(data) {
-    this.data[page] = data;
-    build_table.call(this, "{{ $page }}", {container:'#dataGrid'});
-    });
-}
-</script>
+    <script src="/assets/js/vendor/toastr.min.js"></script>
+    <script src="/assets/js/vendor/gform_bootstrap.js"></script>
+    <script src="/assets/js/vendor/ractive.min.js"></script>
+    <script src="/assets/js/vendor/GrapheneDataGrid.js"></script>
+    <script src="/assets/js/_framework.js"></script>
+    <script>
+    @if(isset($records)) app.data.records={!!json_encode($records)!!}; @endif
+    @if(isset($actions)) app.data.actions={!!json_encode($actions)!!}; @endif
+    </script>
+    <script src="/assets/js/admin/{{$page}}.js"></script>
   </body>
 </html>

@@ -60,10 +60,7 @@ class OAuthController extends Controller
             $response['userinfo_endpoint'] = route('openid.userinfo');
         }
 
-        return response()->json($response, 200, [], JSON_PRETTY_PRINT)
-            ->header('Access-Control-Allow-Origin', '*')
-            ->header('Access-Control-Allow-Methods', 'GET')
-            ->header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, X-Token-Auth, Authorization');
+        return response()->json($response, 200, [], JSON_PRETTY_PRINT);
     }
 
 }

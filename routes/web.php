@@ -1,20 +1,40 @@
 <?php
 
+use Laravel\Passport\Http\Controllers\AccessTokenController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use OpenIDConnect\Laravel\JwksController;
+use App\Http\Middleware\SAML2Authentication;
 use App\Http\Controllers\Saml2Controller;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AppController;
 use App\Http\Controllers\OAuthController;
-use App\HTTP\Middleware\SAML2Authentication;
+use App\Http\Controllers\UserController;
 
 
 /* GENERIC STUFF */
 Route::middleware(['auth','auth.session'])->group(function () {
     Route::get('/', [AppController::class, 'home']);
-    Route::get('/admin/{page?}', [AdminController::class, 'admin']);
+    Route::get('/admin', function (Request $request) {
+        return redirect('/admin/users');
+    });
+    Route::get('/admin/users', [AdminController::class, 'users']);
+    Route::get('/admin/idps', [AdminController::class, 'idps']);
+    Route::get('/admin/oauth', [AdminController::class, 'oauth']);
+    Route::get('/admin/apps', [AdminController::class, 'apps']);
+
+    Route::group(['prefix' => 'api'], function () {
+        Route::get('/users',[UserController::class,'get_users']);
+        Route::post('/users',[UserController::class,'add_user']);
+        Route::put('/users/{user}',[UserController::class,'update_user']);
+        Route::delete('/users/{user}',[UserController::class,'delete_user']);
+        Route::get('/idps',[IDPController::class,'get_idps']);
+        Route::post('/idps',[IDPController::class,'add_idp']);
+        Route::put('/idps/{idp}',[IDPController::class,'update_idp']);
+        Route::delete('/idps/{idp}',[IDPController::class,'delete_idp']);
+    });
 });
+
 
 Route::get('/forcelogin', function (Request $request) {
     Auth::loginUsingId(1);
@@ -39,10 +59,12 @@ Route::prefix('/saml2')->group(function () {
 
 /* OAuth Passport Stuff */
 $guard = config('passport.guard', null);
-Route::get('/.well-known/openid-configuration', [OAuthController::class, 'openid_discovery'])->name('openid.discovery');
+Route::get('/.well-known/openid-configuration', [OAuthController::class, 'openid_discovery'])
+    ->name('openid.discovery')
+    ->middleware('allowallorigin');
 Route::get('/oauth/jwks', JwksController::class)->name('openid.jwks');
 Route::get('/oauth/profile', [OAuthController::class, 'profile'])->name('openid.userinfo')
-    ->middleware(['web', $guard ? 'auth:'.$guard : 'auth']);
+    ->middleware(['allowallorigin','web','auth']);
 
 Route::group([
     'as' => 'passport.',
@@ -50,19 +72,13 @@ Route::group([
     'namespace' => '\Laravel\Passport\Http\Controllers',
 ], function () use ($guard) {
 
-    Route::post('/token', [
-        'uses' => 'AccessTokenController@issueToken',
-        'as' => 'token',
-        'middleware' => 'throttle',
-    ]);
+    Route::post('/token',[AccessTokenController::class,'issueToken'])
+        ->middleware('throttle','allowallorigin')->name('token');           
     
-    Route::get('/authorize', [
-        'uses' => 'AuthorizationController@authorize',
-        'as' => 'authorizations.authorize',
-        'middleware' => ['auth','auth.session','web'],
-    ]);
+    Route::get('/authorize','AuthorizationController@authorize')
+        ->middleware('auth','auth.session','web','allowallorigin')->name('authorizations.authorize');
         
-    Route::middleware(['web', $guard ? 'auth:'.$guard : 'auth'])->group(function () {
+    Route::middleware(['web','auth'])->group(function () {
         Route::post('/token/refresh', [
             'uses' => 'TransientTokenController@refresh',
             'as' => 'token.refresh',

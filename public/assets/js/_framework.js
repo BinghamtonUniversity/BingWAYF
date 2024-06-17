@@ -31,67 +31,86 @@ app.update = function(newdata) {
     }
 };
 
-app.get = function(route,{},callback_success,error_callback) {
+app.get = function(url,callback_success,callback_error) {
     $.ajax({
-        url:route,
-        success:function(data){callback_success(data)},
-        error:function(data){
-            if (typeof error_callback !== 'undefined') {
-                error_callback(data)
-            }
-        }
-    })
-}
-
-app.post = function(route, data, success_callback, error_callback) {
-    toastr.info("Processing... Please Wait!")
-    if (typeof data.username !== 'undefined') {
-        data.username = data.username.trim();
-    }
-    $.ajax({
-        dataType: "json",
-        method: "POST",
-        url: route,
-        data: data,
-        success: function(data,status,xhr) {
-            toastr.remove()
-            if (typeof data.error === 'string') {
-                toastr.remove()
-                toastr.error(data.error);
-                if (typeof error_callback !== 'undefined') {
-                    error_callback(data)
-                }
-            } else if (_.has(data,'error.message') && typeof data.error.message === 'string') {
-                toastr.remove()
-                toastr.error(data.error.message);
-                if (typeof error_callback !== 'undefined') {
-                    error_callback(data)
-                }
-            } else if (typeof data.success === 'undefined' || (typeof data.success !== undefined && data.success==false)) {
-                toastr.remove()
-                toastr.error('An Unexpected Error Occurred.  Please try again.');
-                if (typeof error_callback !== 'undefined') {
-                    error_callback(data)
-                }
-            }
-            if (typeof data.success !== undefined && data.success == true) {
-                success_callback(data)
-            }
+        type: "GET",
+        url: url,
+        success:function(data) {
+            if (typeof callback_success !== 'undefined') {callback_success(data);}
         },
-        error: function(xhr,status) {
-            if (xhr.status == 401) {
-                toastr.error("You are not authenticated.  Redirecting to login.")
-                window.location = '/';
+        error:function(data) {
+            if (typeof data.responseJSON !== 'undefined' && typeof data.responseJSON.error !== 'undefined') {
+                toastr.error(data.responseJSON.error)
+            } else if (typeof data.responseJSON !== 'undefined' && typeof data.responseJSON.message !== 'undefined') {
+                toastr.error(data.responseJSON.message)
             }
-            toastr.remove();
-            toastr.error('An Unexpected Error Occurred.  Please try again.')
-            if (typeof error_callback !== 'undefined') {
-                error_callback(data.responseJSON)
-            }
+            if (typeof callback_error !== 'undefined') {callback_error(data);}
         }
     });
 }
-
+app.post = function(url,data,callback_success,callback_error) {
+    $.ajax({
+        type: "POST",
+        url: url,
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success:function(data) {
+            toastr.success("Created Successfully")
+            if (typeof callback_success !== 'undefined') {callback_success(data);}
+        },
+        error:function(data) {
+            toastr.error("An Error Occurred During Creation")
+            if (typeof data.responseJSON !== 'undefined' && typeof data.responseJSON.error !== 'undefined') {
+                toastr.error(data.responseJSON.error)
+            } else if (typeof data.responseJSON !== 'undefined' && typeof data.responseJSON.message !== 'undefined') {
+                toastr.error(data.responseJSON.message)
+            }
+            if (typeof callback_error !== 'undefined') {callback_error(data);}
+        }
+    });
+}
+app.put = function(url,data,callback_success,callback_error) {
+    $.ajax({
+        type: "PUT",
+        url: url,
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success:function(data) {
+            toastr.success("Updated Sucessfully")
+            if (typeof callback_success !== 'undefined') {callback_success(data);}
+        },
+        error:function(data) {
+            toastr.error("An Error Occurred During Update")
+            if (typeof data.responseJSON !== 'undefined' && typeof data.responseJSON.error !== 'undefined') {
+                toastr.error(data.responseJSON.error)
+            } else if (typeof data.responseJSON !== 'undefined' && typeof data.responseJSON.message !== 'undefined') {
+                toastr.error(data.responseJSON.message)
+            }
+            if (typeof callback_error !== 'undefined') {callback_error(data);}
+        }
+    });
+}
+app.delete = function(url,data,callback_success,callback_error) {
+    $.ajax({
+        type: "DELETE",
+        url: url,
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success:function(data) {
+            toastr.success("Deleted Sucessfully")
+            if (typeof callback_success !== 'undefined') {callback_success(data);}
+        },
+        error:function(data) {
+            toastr.error("An Error Occurred During Deletion")
+            if (typeof data.responseJSON !== 'undefined' && typeof data.responseJSON.error !== 'undefined') {
+                toastr.error(data.responseJSON.error)
+            } else if (typeof data.responseJSON !== 'undefined' && typeof data.responseJSON.message !== 'undefined') {
+                toastr.error(data.responseJSON.message)
+            }
+            if (typeof callback_error !== 'undefined') {callback_error(data);}
+        }
+    });
+}
 
 app.fetch = function(callback) {
     app.get('config.php',{},function(resp_data){
