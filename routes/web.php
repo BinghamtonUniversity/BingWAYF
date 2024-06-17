@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use OpenIDConnect\Laravel\JwksController;
 use App\Http\Controllers\Saml2Controller;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AppController;
@@ -38,6 +39,8 @@ Route::prefix('/saml2')->group(function () {
 
 /* OAuth Passport Stuff */
 $guard = config('passport.guard', null);
+Route::get('/.well-known/openid-configuration', [OAuthController::class, 'openid_discovery'])->name('openid.discovery');
+Route::get('/oauth/jwks', JwksController::class)->name('openid.jwks');
 Route::get('/oauth/profile', [OAuthController::class, 'profile'])->name('openid.userinfo')
     ->middleware(['web', $guard ? 'auth:'.$guard : 'auth']);
 
@@ -126,3 +129,4 @@ Route::group([
         ]);
     });
 });
+
