@@ -203,7 +203,7 @@ class Saml2Controller extends Controller
         $user->email = $attributes['email'];
         $user->save();
 
-        Auth::login($user, true);
+        Auth::login($user);
 
         if ($redirect !== null) {
             return redirect($redirect);

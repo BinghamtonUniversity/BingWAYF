@@ -16,7 +16,7 @@ Route::middleware(['auth','auth.session'])->group(function () {
 });
 
 Route::get('/forcelogin', function (Request $request) {
-    Auth::loginUsingId(1,$remember = true);
+    Auth::loginUsingId(1);
 });
 
 Route::get('/login', [Saml2Controller::class, 'wayf'])->name('login');
