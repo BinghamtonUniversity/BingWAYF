@@ -75,7 +75,7 @@ app.form('filter_form','#filter-form').on('change',function(event){
     app.update();
 });
 
-app.get('/saml2/idps',{},function(data) {
+app.get('/saml2/idps',function(data) {
     app.data.idps = data;
     app.data.filtered_idps = _.cloneDeep(app.data.idps);
     app.data.loading = false;
@@ -86,7 +86,7 @@ app.click('.idp-link',function(event) {
     var idpid = event.target.dataset.idpid;
     app.data.selected_idp = _.find(app.data.idps, {id:parseInt(idpid)});
     app.update();
-    app.get('/saml2/idps/'+idpid,{},function(data) {
+    app.get('/saml2/idps/'+idpid,function(data) {
         app.data.selected_idp = data;
         app.update();
     });
