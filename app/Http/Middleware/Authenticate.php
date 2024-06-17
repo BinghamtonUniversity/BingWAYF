@@ -16,6 +16,8 @@ class Authenticate extends Middleware
     {
         if ($request->expectsJson()) {
             return null;
+        } else if (Route::current()->uri === '/') {
+            return URL::route('login');
         } else {
             return URL::route('login').'?redirect='.urlencode(url()->full());
         }
