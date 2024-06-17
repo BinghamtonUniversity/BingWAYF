@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Saml2Controller;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AppController;
+use App\Http\Controllers\OAuthController;
 use App\HTTP\Middleware\SAML2Authentication;
 
 
@@ -25,7 +26,6 @@ Route::get('/idp/google/callback', [Saml2Controller::class, 'google_callback']);
 Route::get('/logout', [Saml2Controller::class, 'logout'])->name('saml_logout');
 Route::get('/health', [Saml2Controller::class, 'health'])->name('health_check');
 
-Route::get('/oauth/userinfo', [OAuthController::class, 'userinfo'])->name('openid.userinfo');
 
 /* SAML Stuff */
 Route::prefix('/saml2')->group(function () {
@@ -36,12 +36,15 @@ Route::prefix('/saml2')->group(function () {
     Route::get('/wayf/{id}', [Saml2Controller::class, 'wayfcallback'])->name('saml_wayf');
 });
 
+Route::get('/oauth/userinfo', [OAuthController::class, 'userinfo'])->name('openid.userinfo');;
+
 /* OAuth Passport Stuff */
 Route::group([
     'as' => 'passport.',
     'prefix' => config('passport.path', 'oauth'),
     'namespace' => '\Laravel\Passport\Http\Controllers',
 ], function () {
+
     Route::post('/token', [
         'uses' => 'AccessTokenController@issueToken',
         'as' => 'token',
