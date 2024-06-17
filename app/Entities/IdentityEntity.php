@@ -41,6 +41,7 @@ class IdentityEntity implements IdentityEntityInterface
             'name' => $this->user->first_name.' '.$this->user->last_name,
             'id' => $this->user->id,
             'username' => 'bingwayf-'.$this->user->id,
+            'preferred_username' => 'bingwayf-'.$this->user->id,
         ];
     }
 }
