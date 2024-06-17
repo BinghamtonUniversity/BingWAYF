@@ -93,7 +93,7 @@ class Saml2Controller extends Controller
         $user->idp = 'google';
         $user->last_login = now();
         $user->save();
-        Auth::login($user, true);
+        Auth::login($user);
 
         if (isset($redirect) && $redirect !== null) {
             return redirect($redirect);
