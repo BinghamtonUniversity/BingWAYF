@@ -13,7 +13,6 @@ class AdminController extends Controller
     }
 
     public function users(Request $request, $page=null) {
-        $users = User::select('id','first_name','last_name','email')->get();
         $identity = Auth::user();
         $actions = [
             ["name"=>"create","label"=>"New User"],'',
@@ -22,14 +21,12 @@ class AdminController extends Controller
         ];
         return view('default.admin',[
             'page'=>'users',
-            'records'=>$users,
             'title'=>'Manage Users',
             'help'=>'Manage the users and whatnot',
             'actions'=>$actions,
         ]);
     }
     public function idps(Request $request, $page=null) {
-        $idps = IDP::get();
         $identity = Auth::user();
         $actions = [
             ["name"=>"create","label"=>"New IDP"],'',
@@ -38,13 +35,24 @@ class AdminController extends Controller
         ];
         return view('default.admin',[
             'page'=>'idps',
-            'records'=>$idps,
             'title'=>'Manage IDPs',
             'help'=>'Manage the idps and whatnot',
             'actions'=>$actions,
         ]);
     }
-    public function oauth(Request $request, $page=null) {
+    public function oauth_clients(Request $request, $page=null) {
+        $identity = Auth::user();
+        $actions = [
+            ["name"=>"create","label"=>"New OAuth Client"],'',
+            ["name"=>"edit","label"=>"Update OAuth Client"],'',
+            ["name"=>"delete","label"=>"Delete OAuth Client"]
+        ];
+        return view('default.admin',[
+            'page'=>'oauth_clients',
+            'title'=>'Manage OAuth Clients',
+            'help'=>'Manage the OAuth Client and whatnot',
+            'actions'=>$actions,
+        ]);
     }
     public function apps(Request $request, $page=null) {
     }

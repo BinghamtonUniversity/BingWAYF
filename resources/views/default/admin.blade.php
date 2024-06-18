@@ -78,7 +78,7 @@
           <ul class="nav navbar-nav navbar-right visible-xs-block">
             <li><a href="/admin/users"><i class="fa fa-user fa-fw"></i>&nbsp; Users</a></li>
             <li><a href="/admin/idps"><i class="fa fa-users fa-fw"></i>&nbsp; IDPs</a></li>
-            <li><a href="/admin/oauth"><i class="fa fa-notes-medical fa-fw"></i>&nbsp; OAuth</a></li>
+            <li><a href="/admin/oauth_clients"><i class="fa fa-notes-medical fa-fw"></i>&nbsp; Oauth Clients</a></li>
             <li><a href="/admin/apps"><i class="fa fa-notes-medical fa-fw"></i>&nbsp; Apps</a></li>
           </ul>
         </div>
@@ -88,7 +88,7 @@
       <ul class="nav nav-sidebar">
         <li class="@if($page=='users') active @endif"><a href="/admin/users"><i class="fa fa-user fa-fw"></i>&nbsp; Users</a></li>
         <li class="@if($page=='idps') active @endif"><a href="/admin/idps"><i class="fa fa-users fa-fw"></i>&nbsp; IDPs</a></li>
-        <li class="@if($page=='oauth') active @endif"><a href="/admin/oauth"><i class="fa fa-notes-medical fa-fw"></i>&nbsp; OAuth</a></li>
+        <li class="@if($page=='oauth_clients') active @endif"><a href="/admin/oauth_clients"><i class="fa fa-notes-medical fa-fw"></i>&nbsp; OAuth Clients</a></li>
         <li class="@if($page=='apps') active @endif"><a href="/admin/apps" ><i class="fa fa-pills fa-fw"></i>&nbsp; Apps</a></li>
       </ul>
     </div>

@@ -10,7 +10,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AppController;
 use App\Http\Controllers\OAuthController;
 use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\IDPController;
 
 /* GENERIC STUFF */
 Route::middleware(['auth','auth.session'])->group(function () {
@@ -20,7 +20,7 @@ Route::middleware(['auth','auth.session'])->group(function () {
     });
     Route::get('/admin/users', [AdminController::class, 'users']);
     Route::get('/admin/idps', [AdminController::class, 'idps']);
-    Route::get('/admin/oauth', [AdminController::class, 'oauth']);
+    Route::get('/admin/oauth_clients', [AdminController::class, 'oauth_clients']);
     Route::get('/admin/apps', [AdminController::class, 'apps']);
 
     Route::group(['prefix' => 'api'], function () {
@@ -32,6 +32,11 @@ Route::middleware(['auth','auth.session'])->group(function () {
         Route::post('/idps',[IDPController::class,'add_idp']);
         Route::put('/idps/{idp}',[IDPController::class,'update_idp']);
         Route::delete('/idps/{idp}',[IDPController::class,'delete_idp']);
+        Route::get('/oauth_clients',[OAuthController::class,'get_clients']);
+        Route::post('/oauth_clients',[OAuthController::class,'add_client']);
+        Route::put('/oauth_clients/{client}',[OAuthController::class,'update_client']);
+        Route::delete('/oauth_clients/{client}',[OAuthController::class,'delete_client']);
+        Route::delete('/oauth_clients/{client}/regenerate_secret',[OAuthController::class,'regenerate_secret']);
     });
 });
 
