@@ -72,6 +72,8 @@ Route::get('/oauth/jwks', JwksController::class)
 Route::get('/oauth/profile', [OAuthController::class, 'profile'])
     ->name('openid.userinfo')
     ->middleware(['allowallorigin']);
+Route::post('/oauth/profile', [OAuthController::class, 'profile'])
+    ->middleware(['allowallorigin']);
 
 Route::group([
     'as' => 'passport.',
