@@ -97,7 +97,6 @@ return [
                 ["friendlyName" => "givenName", 'name'=> 'urn:oid:2.5.4.42', "isRequired" => true],
                 ["friendlyName" => "sn", 'name'=> 'urn:oid:2.5.4.4', "isRequired" => true],
                 ["friendlyName" => "mail", 'name'=> 'urn:oid:0.9.2342.19200300.100.1.3', "isRequired" => true],
-                ["friendlyName" => "eduPersonTargetedID", 'name'=> 'urn:oid:1.3.6.1.4.1.5923.1.1.1.10', "isRequired" => true],
             ]
         ],
 
