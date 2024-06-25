@@ -196,8 +196,11 @@ class Saml2Controller extends Controller
         if (!is_null($userIDP)) {
             $user = User::where('id',$userIDP->user_id)->first();
         } else {
-            $user = new User();
-            $user->save();
+            $user = User::where('email',$attributes['unique_id'])->first();
+            if (is_null($user)) {
+                $user = new User();
+                $user->save();
+            }
             $userIDP = new UserIDP(['user_id'=>$user->id,'idp_id'=>$id,'unique_id'=>$attributes['unique_id']]);
             $userIDP->save();
         }
