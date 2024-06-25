@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('config')->json()->default('');
             $table->string('enabled')->boolean()->default(false);
             $table->string('debug')->boolean()->default(false);
+            $table->unsignedInteger('order')->default(4294967295);
             $table->timestamps();
         });
     }
