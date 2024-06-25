@@ -117,10 +117,18 @@ class Saml2Controller extends Controller
     public function acs() {
         // Deconstruct the RelayState Variable to fetch the correct IDP and Redirect URL
         $relay_state = json_decode(base64_decode(strtr(request()->input('RelayState'),'._-','+/=')));
+        if (is_null($relay_state) || !isset($relay_state->idp) || is_null($relay_state->idp)) {
+            return redirect('login');
+        }
+
         $id = $relay_state->idp;
         $redirect = $relay_state->redirect;
         
         $idp = IDP::where('id',$id)->first();
+        if (is_null($idp)) {
+            return redirect('login');
+        }
+
         config(['saml2_settings.idp' => [
             'name' => $idp->name,
             'entityId' => $idp->entityId,
