@@ -27,7 +27,7 @@ window.templates.main = `
     <div class="col-sm-12">
     @{{^selected_idp}}
     <div class="row">
-        <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-12" style="margin-top:20px;">
+        <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-12" style="margin-top:40px;">
             <div class="well" style="text-align:center;">
                 <div style="margin-bottom:15px;">Where are you from?</div>
                 @{{#enabled_idps}}
@@ -59,7 +59,7 @@ window.templates.main = `
     @{{/selected_idp}}
     @{{#selected_idp}}
     <div class="row">
-        <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2" style="margin-top:20px;">
+        <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2" style="margin-top:40px;">
             <div class="selected-idp">
                 <div class="alert alert-success">
                 <center>
