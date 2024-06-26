@@ -37,7 +37,7 @@
     <![endif]-->
   </head>
   <body>
-    <nav class="navbar navbar-default navbar-inverse navbar-fixed-top" style="background-color:#333;border-width:0px">
+    <nav class="navbar navbar-default navbar-inverse navbar-fixed-top" style="background-color:#014634;border-width:0px">
       <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
@@ -47,7 +47,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/" style="background:#005A43;color:white;padding: 0px 0px 0px 25px;">
+          <a class="navbar-brand" href="/" style="background:#014634;color:white;padding: 0px 0px 0px 25px;">
             <h3 style="color:#fff;margin-top:12px;"><i class="fa fa-share"></i> BingWAYF</h3>
           </a>
         </div>
@@ -59,7 +59,7 @@
                 @if(!is_null(Auth::user()))
                     <img class="gravatar" src="https://www.gravatar.com/avatar/{{ md5(Auth::user()->email) }}?d=mm" /> 
                     {{Auth::user()->first_name}} {{Auth::user()->last_name}} <span class="caret"></span>
-                @else Welcome! @endif
+                @endif
                 </a>
               @if(!is_null(Auth::user()))
                 <ul class="dropdown-menu">
@@ -83,11 +83,9 @@
     bottom: 0px;
     right: 0px;
     left: 0px;
-    background-color: #ddd; color:#555;
-    padding: 5px 20px;">
-    <i class="far fa-copyright fa-fw"></i> {{ now()->year }} Binghamton University</a>&nbsp;|
-    <a style="color:#555;" href="https://www.binghamton.edu/its/about/policies/binghamton-university-privacy-policy.html"><i class="fas fa-shield-alt fa-lg fa-fw"></i>&nbsp;Privacy</a>&nbsp;|
-    <a style="color:#555;" href="https://github.com/BinghamtonUniversity/BingWAYF"><i class="fab fa-github fa-lg fa-fw"></i>&nbsp;Github</a>&nbsp;|
+    padding: 5px 20px;
+    z-index:-10">
+    <i class="far fa-copyright fa-fw"></i> {{ now()->year }} Binghamton University</a>
     </div>
     </footer>
     <!-- Footer -->
