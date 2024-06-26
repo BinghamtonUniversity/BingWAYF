@@ -42,9 +42,6 @@ window.templates.main = `
                 <div id="filter-form"></div>
                 <div style="max-height:300px;overflow:scroll;">
                     <ul class="list-group"> 
-                        @{{#loading}}
-                            <li class="list-group-item">Loading ...</li>
-                        @{{/loading}}
                         @{{#show_filtered_idps}}
                             @{{#filtered_idps}}
                                 <li data-idpid="@{{id}}" class="list-group-item idp-link" style="cursor:pointer;">@{{name}}</li>
@@ -77,7 +74,6 @@ window.templates.main = `
 `;
 ractive.resetTemplate(window.templates.main);
 
-app.data.loading = true;
 app.update();
 
 app.form('filter_form','#filter-form').on('change',function(event){
@@ -93,8 +89,6 @@ app.get('/saml2/idps',function(data) {
     app.data.idps = data;
     app.data.filtered_idps = _.cloneDeep(app.data.idps);
     app.data.show_filtered_idps = false;
-    app.data.enabled_idps = _.filter(app.data.idps,{enabled:true});
-    app.data.loading = false;
     app.update();
 })
 

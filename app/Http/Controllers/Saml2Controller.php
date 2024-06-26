@@ -29,10 +29,11 @@ class Saml2Controller extends Controller
 
     public function wayf(Request $request) {
         if(!Auth::user()){
-            $enabled_idps = explode(',',config('saml2_settings.enabled_idps'));
-
             $contents = view('wayf',['data'=>[
-                'redirect'=> urlencode($request->redirect)
+                'redirect'=> urlencode($request->redirect),
+                'enabled_idps' => IDP::select('name','id','enabled')
+                    ->where('enabled',true)
+                    ->orderBy('order','asc')->orderBy('id','asc')->get()
             ]]);
             return response($contents)
                 ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
