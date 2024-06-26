@@ -12,7 +12,7 @@ class IDPController extends Controller
     public function __construct() {
     }
     public function get_idps(Request $request) {
-        $idps = IDP::select('id','entityId','singleSignOnServiceUrl','singleLogoutServiceUrl','enabled','debug')->get();
+        $idps = IDP::select('id','name','entityId','singleSignOnServiceUrl','singleLogoutServiceUrl','enabled','debug','order')->get();
         return $idps;
     }
     public function add_idp(Request $request) {

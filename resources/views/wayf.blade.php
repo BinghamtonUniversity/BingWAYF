@@ -18,29 +18,42 @@ window.forms.filter_form = {
     name:'filter_form',
     el:'#filter-form',
     legend:'',
-    fields: [{name:'filter',label:'','help':'Filter by Organization Name',type:'text',placeholder:'Organization\'s Name'}],
+    fields: [{name:'filter',label:'','help':'Search by Organization Name',type:'text',placeholder:'Organization\'s Name'}],
     actions: []
 };
 window.templates.main = `
 
 <div class="row">
     <div class="col-sm-12">
-    <center><h1 style="text-align:center;">Binghamton University's Federated Login</h1></center>
     @{{^selected_idp}}
     <div class="row">
-        <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-12" style="margin-top:20px;">
-            <div id="filter-form"></div>
-            <div style="max-height:300px;overflow:scroll;margin-bottom:20px;">
-                <ul class="list-group"> 
-                    @{{#loading}}
-                        <li class="list-group-item">Loading ...</li>
-                    @{{/loading}}
-                    @{{#filtered_idps}}
-                        <li data-idpid="@{{id}}" class="list-group-item idp-link" style="cursor:pointer;"><i style="margin-top:4px;" class="fa fa-lock fa-lg fa-fw pull-right"></i>@{{name}}</li>
-                    @{{/filtered_idps}}
-                </ul>
+        <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-12" style="margin-top:20px;">
+            <div class="well" style="text-align:center;">
+                <div style="margin-bottom:15px;">Login with</div>
+                @{{#enabled_idps}}
+                    <div style="margin-bottom:15px;">
+                        <div data-idpid="@{{id}}" class="btn btn-lg btn-primary idp-link" style="background-color:#005a43;border-color:#004131">
+                            <i class="fa fa-lg fa-university"></i> @{{name}}
+                        </div>
+                    </div>
+                @{{/enabled_idps}}
+                or
+                <hr>
+                <div id="filter-form"></div>
+                <div style="max-height:300px;overflow:scroll;">
+                    <ul class="list-group"> 
+                        @{{#loading}}
+                            <li class="list-group-item">Loading ...</li>
+                        @{{/loading}}
+                        @{{#show_filtered_idps}}
+                            @{{#filtered_idps}}
+                                <li data-idpid="@{{id}}" class="list-group-item idp-link" style="cursor:pointer;">@{{name}}</li>
+                            @{{/filtered_idps}}
+                        @{{/show_filtered_idps}}
+                    </ul>
+                </div>
+                @{{#show_filtered_idps}}<div class="alert alert-info" style="margin-bottom:0px;">To log in, please select your organization's identity provider<br> from the list above</div>@{{/show_filtered_idps}}
             </div>
-            <center><div class="alert alert-info">To log in, please select your organization's identity provider<br> from the list above</div></center>
         </div>
     </div>
     @{{/selected_idp}}
@@ -72,12 +85,15 @@ app.form('filter_form','#filter-form').on('change',function(event){
     app.data.filtered_idps = _.filter(app.data.idps,function(o) {
         return _.toLower(_.deburr(o.name)).includes(filter)
     })
+    app.data.show_filtered_idps = app.data.filtered_idps.length <= 50;
     app.update();
 });
 
 app.get('/saml2/idps',function(data) {
     app.data.idps = data;
     app.data.filtered_idps = _.cloneDeep(app.data.idps);
+    app.data.show_filtered_idps = false;
+    app.data.enabled_idps = _.filter(app.data.idps,{enabled:true});
     app.data.loading = false;
     app.update();
 })

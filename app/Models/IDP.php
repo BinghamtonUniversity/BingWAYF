@@ -10,7 +10,7 @@ class IDP extends Model
     use HasFactory;
 
     protected $table = 'idps';
-    protected $fillable = ['entityId','name','singleSignOnServiceUrl','singleLogoutServiceUrl','x509cert','logo','config','enabled','debug'];
+    protected $fillable = ['entityId','name','singleSignOnServiceUrl','singleLogoutServiceUrl','x509cert','logo','config','enabled','debug','order'];
     protected $casts = ['config' => 'json','enabled' => 'boolean','debug' => 'boolean'];
 
     public function idp_users(){
