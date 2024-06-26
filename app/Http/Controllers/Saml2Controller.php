@@ -47,7 +47,8 @@ class Saml2Controller extends Controller
         if (!is_null($idp)) {
             return $idp;
         } else {
-            return IDP::orderBy('id','asc')->select('name','id','enabled')->get();
+            return IDP::select('name','id','enabled')
+                ->orderBy('id','asc')->orderBy('order','asc')->get();
         }
     }
 
