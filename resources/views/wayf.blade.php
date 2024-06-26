@@ -32,7 +32,7 @@ window.templates.main = `
                 <div style="margin-bottom:15px;">Where are you from?</div>
                 @{{#enabled_idps}}
                     <div style="margin-bottom:15px;">
-                        <div data-idpid="@{{id}}" class="btn btn-lg btn-primary idp-link" style="background-color:#005a43;border-color:#004131">
+                        <div data-idpid="@{{id}}" class="btn btn-lg btn-primary idp-link" style="background-color:#005a43;border-color:#004131;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;">
                             <i class="fa fa-lg fa-university"></i> @{{name}}
                         </div>
                     </div>
