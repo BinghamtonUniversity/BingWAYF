@@ -93,7 +93,7 @@ app.get('/saml2/idps',function(data) {
 })
 
 app.click('.idp-link',function(event) {
-    var idpid = event.target.dataset.idpid;
+    var idpid = event.currentTarget.dataset.idpid;
     app.data.selected_idp = _.find(app.data.idps, {id:parseInt(idpid)});
     app.update();
     app.get('/saml2/idps/'+idpid,function(data) {
