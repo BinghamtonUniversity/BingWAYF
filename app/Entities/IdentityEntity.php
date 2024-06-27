@@ -40,7 +40,7 @@ class IdentityEntity implements IdentityEntityInterface
             'nickname' => $this->user->first_name,
             'family_name' => $this->user->last_name,
             'name' => $this->user->first_name.' '.$this->user->last_name,
-            'sub' => $this->user->id,
+            'sub' => strval($this->user->id),
             'preferred_username' => 'bingwayf-'.$this->user->id,
         ];
     }
