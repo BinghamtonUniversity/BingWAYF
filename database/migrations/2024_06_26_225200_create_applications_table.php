@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->text('url')->nullable()->default(null);
             $table->string('logo')->nullable()->default(null);
             $table->text('description')->nullable()->default(null);
             $table->enum('auth_type', ['openid','oauth','cas','saml2']);

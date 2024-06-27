@@ -9,6 +9,7 @@ app.get('/api/applications',function(all_applications) {
         schema:[
             {label: 'ID', name:'id', type:'hidden'},
             {label:'Name', name: 'name'},
+            {label:'URL', name: 'url'},
             {label:'Logo', name: 'logo'},
             {label:'Description', name: 'description'},
             {label:'Auth Type', name: 'auth_type',type:'select',options:[{label:'OpenId',value:'openid'},{label:'OAuth',value:'oauth'},{label:'CAS',value:'cas'},{label:'SAML2',value:'saml2'}]},

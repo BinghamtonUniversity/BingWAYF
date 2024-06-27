@@ -9,7 +9,10 @@ class Application extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name','logo','description','auth_type','auth_client_id','public'];
+    protected $fillable = [
+        'name','ur','logo','description','auth_type',
+        'auth_client_id','public'
+    ];
 
     protected $casts = [
         'auth_client_id' => 'integer',
