@@ -1,10 +1,10 @@
 <?php
  
-namespace App\Models;
+namespace App\Models\Passport;
  
 use Laravel\Passport\Client as BaseClient;
  
-class OAuthClient extends BaseClient
+class Client extends BaseClient
 {
     /**
      * Determine if the client should skip the authorization prompt.

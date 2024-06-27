@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\UserIDP;
 use App\Entities\IdentityEntity;
-use App\Models\OAuthClient;
+use App\Models\Passport\Client;
 
 class OAuthController extends Controller
 {
@@ -66,11 +66,11 @@ class OAuthController extends Controller
     }
 
     public function get_clients(Request $request) {
-        $clients = OAuthClient::where('revoked',0)->get();
+        $clients = Client::where('revoked',0)->get();
         return $clients;
     }
     public function add_client(Request $request) {
-        $client = new OAuthClient();
+        $client = new Client();
         $client->forceFill([
             'user_id' => Auth::user()->id,
             'name' => $request->name,
@@ -84,18 +84,18 @@ class OAuthController extends Controller
         $client->save();
         return $client->plain_secret;
     }
-    public function update_client(Request $request, OAuthClient $client) {
+    public function update_client(Request $request, Client $client) {
         $client->forceFill([
             'name' => $request->name, 'redirect' => $request->redirect,
         ])->save();
         return $client;
     }
-    public function delete_client(Request $request, OAuthClient $client) {
+    public function delete_client(Request $request, Client $client) {
         $client->tokens()->update(['revoked' => true]);
         $client->forceFill(['revoked' => true])->save();
         return "1";
     }
-    public function regenerate_secret(Request $request, OAuthClient $client) {
+    public function regenerate_secret(Request $request, Client $client) {
         $client->forceFill([
             'secret' => Str::random(40),
         ])->save();
