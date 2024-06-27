@@ -7,31 +7,53 @@ use OpenIDConnect\Laravel\JwksController;
 use App\Http\Middleware\SAML2Authentication;
 use App\Http\Controllers\Saml2Controller;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AppController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OAuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\IDPController;
+use App\Http\Controllers\ApplicationController;
 
 /* GENERIC STUFF */
 Route::middleware(['auth','auth.session'])->group(function () {
-    Route::get('/', [AppController::class, 'home']);
+    Route::get('/', [DashboardController::class, 'home']);
     Route::get('/admin', function (Request $request) {
         return redirect('/admin/users');
     });
     Route::get('/admin/users', [AdminController::class, 'users']);
+    Route::get('/admin/users/{user}/idps', [AdminController::class, 'user_idps']);
+    Route::get('/admin/users/{user}/applications', [AdminController::class, 'user_applications']);
     Route::get('/admin/idps', [AdminController::class, 'idps']);
+    Route::get('/admin/idps/{idp}/users', [AdminController::class, 'idp_users']);
     Route::get('/admin/oauth_clients', [AdminController::class, 'oauth_clients']);
-    Route::get('/admin/apps', [AdminController::class, 'apps']);
+    Route::get('/admin/applications', [AdminController::class, 'applications']);
+    Route::get('/admin/applications/{application}/users', [AdminController::class, 'application_users']);
 
     Route::group(['prefix' => 'api'], function () {
         Route::get('/users',[UserController::class,'get_users']);
         Route::post('/users',[UserController::class,'add_user']);
         Route::put('/users/{user}',[UserController::class,'update_user']);
         Route::delete('/users/{user}',[UserController::class,'delete_user']);
+        Route::get('/users/{user}/idps',[UserController::class,'get_user_idps']);
+        Route::post('/users/{user}/idps',[UserController::class,'add_user_idp']);
+        Route::put('/users/{user}/idps/{user_idp}',[UserController::class,'update_user_idp']);
+        Route::delete('/users/{user}/idps/{user_idp}',[UserController::class,'delete_user_idp']);
+        Route::get('/users/{user}/applications',[UserController::class,'get_user_applications']);
+        Route::post('/users/{user}/applications',[UserController::class,'add_user_application']);
+        Route::put('/users/{user}/applications/{user_application}',[UserController::class,'update_user_application']);
+        Route::delete('/users/{user}/applications/{user_application}',[UserController::class,'delete_user_application']);
+        
         Route::get('/idps',[IDPController::class,'get_idps']);
         Route::post('/idps',[IDPController::class,'add_idp']);
         Route::put('/idps/{idp}',[IDPController::class,'update_idp']);
         Route::delete('/idps/{idp}',[IDPController::class,'delete_idp']);
+        Route::get('/idps/{idp}/users',[IDPController::class,'get_idp_users']);
+        
+        Route::get('/applications',[ApplicationController::class,'get_applications']);
+        Route::post('/applications',[ApplicationController::class,'add_application']);
+        Route::put('/applications/{application}',[ApplicationController::class,'update_application']);
+        Route::delete('/applications/{application}',[ApplicationController::class,'delete_application']);
+        Route::get('/applications/{application}/users',[ApplicationController::class,'get_application_users']);
+
         Route::get('/oauth_clients',[OAuthController::class,'get_clients']);
         Route::post('/oauth_clients',[OAuthController::class,'add_client']);
         Route::put('/oauth_clients/{client}',[OAuthController::class,'update_client']);
@@ -39,7 +61,6 @@ Route::middleware(['auth','auth.session'])->group(function () {
         Route::delete('/oauth_clients/{client}/regenerate_secret',[OAuthController::class,'regenerate_secret']);
     });
 });
-
 
 Route::get('/forcelogin', function (Request $request) {
     Auth::loginUsingId(1);

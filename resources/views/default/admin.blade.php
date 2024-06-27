@@ -8,19 +8,7 @@
     <meta name="author" content="">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0" />
     <title>BingWAYF | {{$title}}</title>
-    <!-- Custom Light / Dark Mode CSS -->
-    <script>
-      if (window.matchMedia('(prefers-color-scheme: dark)').media === 'not all') {
-        document.documentElement.style.display = 'none';
-        document.head.insertAdjacentHTML(
-          'beforeend',
-          '<link rel="stylesheet" href="/light.css" onload="document.documentElement.style.display = \'\'">',
-        );
-      }
-    </script>
-    <link rel="stylesheet" href="/assets/css/bootstrap.darkly.min.css" media="(prefers-color-scheme: dark)" />
-    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" media="(prefers-color-scheme: light)" />
-    <!-- AFTER -->
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <!--<link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">-->
     <!-- Custom styles for this template -->
@@ -78,8 +66,8 @@
           <ul class="nav navbar-nav navbar-right visible-xs-block">
             <li><a href="/admin/users"><i class="fa fa-user fa-fw"></i>&nbsp; Users</a></li>
             <li><a href="/admin/idps"><i class="fa fa-users fa-fw"></i>&nbsp; IDPs</a></li>
-            <li><a href="/admin/oauth_clients"><i class="fa fa-notes-medical fa-fw"></i>&nbsp; Oauth Clients</a></li>
-            <li><a href="/admin/apps"><i class="fa fa-notes-medical fa-fw"></i>&nbsp; Apps</a></li>
+            <li><a href="/admin/applications"><i class="fa fa-notes-medical fa-fw"></i>&nbsp; Applications</a></li>
+            <li><a href="/admin/oauth_clients"><i class="fa fa-notes-medical fa-fw"></i>&nbsp; OpenID/OAuth Clients</a></li>
           </ul>
         </div>
       </div>
@@ -88,8 +76,8 @@
       <ul class="nav nav-sidebar">
         <li class="@if($page=='users') active @endif"><a href="/admin/users"><i class="fa fa-user fa-fw"></i>&nbsp; Users</a></li>
         <li class="@if($page=='idps') active @endif"><a href="/admin/idps"><i class="fa fa-users fa-fw"></i>&nbsp; IDPs</a></li>
-        <li class="@if($page=='oauth_clients') active @endif"><a href="/admin/oauth_clients"><i class="fa fa-notes-medical fa-fw"></i>&nbsp; OAuth Clients</a></li>
-        <li class="@if($page=='apps') active @endif"><a href="/admin/apps" ><i class="fa fa-pills fa-fw"></i>&nbsp; Apps</a></li>
+        <li class="@if($page=='applications') active @endif"><a href="/admin/applications" ><i class="fa fa-pills fa-fw"></i>&nbsp; Applications</a></li>
+        <li class="@if($page=='oauth_clients') active @endif"><a href="/admin/oauth_clients"><i class="fa fa-notes-medical fa-fw"></i>&nbsp; OpenID/OAuth Clients</a></li>
       </ul>
     </div>
     <div class="container-fluid" id="main-container">
@@ -120,7 +108,7 @@
     <script src="/assets/js/vendor/GrapheneDataGrid.js"></script>
     <script src="/assets/js/_framework.js"></script>
     <script>
-    @if(isset($records)) app.data.records={!!json_encode($records)!!}; @endif
+    @if(isset($id)) app.data.id={!!json_encode($id)!!}; @endif
     @if(isset($actions)) app.data.actions={!!json_encode($actions)!!}; @endif
     </script>
     <script src="/assets/js/admin/{{$page}}.js"></script>

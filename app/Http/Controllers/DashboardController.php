@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Models\UserIDP;
 
 
-class AppController extends Controller
+class DashboardController extends Controller
 {
     public function __construct() {
     }

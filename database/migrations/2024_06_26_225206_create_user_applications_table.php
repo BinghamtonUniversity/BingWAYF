@@ -11,16 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_idps', function (Blueprint $table) {
+        Schema::create('user_applications', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->index();
-            $table->unsignedBigInteger('idp_id')->index();
-            $table->string('unique_id')->index();
-            $table->json('attributes')->nullable()->default(null);
+            $table->unsignedBigInteger('application_id')->index();
+            $table->boolean('approved')->default(false);
             $table->timestamp('last_login')->nullable()->default(null);
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('idp_id')->references('id')->on('idps');
-            $table->unique('user_id', 'idp_id');
+            $table->foreign('application_id')->references('id')->on('applications');
+            $table->unique('user_id', 'application_id');
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_idps');
+        Schema::dropIfExists('user_applications');
     }
 };

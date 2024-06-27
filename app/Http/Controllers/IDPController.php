@@ -28,4 +28,7 @@ class IDPController extends Controller
         $idp->delete();
         return "1";
     }
+    public function get_idp_users(Request $request, IDP $idp) {
+        return UserIDP::where('idp_id',$idp->id)->get();
+    }
 }

@@ -11,7 +11,11 @@ class UserIDP extends Model
 
     protected $table = 'user_idps';
     protected $fillable = ['idp_id','user_id','unique_id','attributes','last_login'];
-    protected $casts = ['attributes' => 'json','last_login' => 'date:Y-m-d H:i:s'];
+    protected $casts = [
+        'user_id' => 'integer',
+        'idp_id' => 'integer',
+        'attributes' => 'json',
+        'last_login' => 'date:Y-m-d H:i:s'];
 
     public function user(){
         return $this->belongsTo(User::class);

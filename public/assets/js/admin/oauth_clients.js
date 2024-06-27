@@ -12,7 +12,7 @@ app.get('/api/oauth_clients',function(all_clients) {
             {label:'Secret', name: 'secret',edit:false},
             {label:'Redirect', name: 'redirect'},
         ], 
-        data: all_clients
+        data: _.reverse(all_clients)
     }).on("model:edited",function(grid_event) {
         app.put('/api/oauth_clients/'+grid_event.model.attributes.id,grid_event.model.attributes,function(data) {
             grid_event.model.update(data)
