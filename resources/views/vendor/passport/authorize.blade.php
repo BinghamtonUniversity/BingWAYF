@@ -6,9 +6,10 @@
     <div class="row">
         <div class="col-sm-offset-3 col-sm-6 ">
             <h1>Permission Denied</h1>
-            <div class="alert alert-danger">
+            <div class="alert alert-warning">
                 You do not have permission to use the "{{$client->name}}" application.
-                If you think that this is an error, please open a ticket with your mom.
+                If you believe that this is in error, please contact 
+                <a href="mailto:itsresearchsupport@binghamton.edu">itsresearchsupport@binghamton.edu</a>.
             </div>
             <a href="/"><i class="fa fa-arrow-left fa-fw"></i> Return to Home</a>
         </div>
