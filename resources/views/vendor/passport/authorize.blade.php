@@ -3,11 +3,14 @@
 @section('title', 'Permission Denied')
 
 @section('content')
-    <div id="main_target">
-        <h1>Permission Denied</h1>
-        <div class="alert alert-danger">
-            You do not have permission to use the {{$client->name}} application.
-            If you think that this is an error, please open a ticket with your mom.
+    <div class="row">
+        <div class="col-sm-offset-3 col-sm-6 ">
+            <h1>Permission Denied</h1>
+            <div class="alert alert-danger">
+                You do not have permission to use the "{{$client->name}}" application.
+                If you think that this is an error, please open a ticket with your mom.
+            </div>
+            <a href="/"><i class="fa fa-arrow-left fa-fw"></i> Return to Home</a>
         </div>
     </div>
 @endsection
