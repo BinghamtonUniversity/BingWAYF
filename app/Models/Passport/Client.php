@@ -14,7 +14,6 @@ class Client extends BaseClient
      */
     public function skipsAuthorization(): bool
     {
-        return false;
         $application = Application::where('auth_client_id',request()->client_id)->first();
         if (!is_null($application)) {
             $user_application = UserApplication::where('application_id',$application->id)
