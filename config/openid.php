@@ -33,7 +33,7 @@ return [
      */
     'repositories' => [
         'identity' => \OpenIDConnect\Repositories\IdentityRepository::class,
-        'scope' => \OpenIDConnect\Repositories\ScopeRepository::class,
+        'scope' => \App\Repositories\ScopeRepository::class,
     ],
 
     /**
