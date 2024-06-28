@@ -51,7 +51,9 @@ window.templates.main = `
                     @{{#application.logo}}
                         <label>Logo:</label> @{{application.logo}}<br>
                     @{{/application.logo}}
-                    @{{application.description}}<br>
+                    @{{#application.description}}
+                        @{{application.description}}<br>
+                    @{{/application.description}}
                     <hr>
                 @{{/user_apps}} 
             </div>
@@ -65,7 +67,9 @@ window.templates.main = `
                     @{{#logo}}
                         <label>Logo:</label> @{{logo}}<br>
                     @{{/logo}}
-                    @{{description}}<br>
+                    @{{#description}}
+                        @{{description}}<br>
+                    @{{/description}}
                     <hr>
                 @{{/all_apps}} 
             </div>

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->timestamp('last_login')->nullable()->default(null);
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('application_id')->references('id')->on('applications');
-            $table->unique('user_id', 'application_id');
+            $table->unique(['user_id', 'application_id']);
             $table->timestamps();
         });
     }
