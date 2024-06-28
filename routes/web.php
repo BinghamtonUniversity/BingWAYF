@@ -103,9 +103,10 @@ Route::group([
 ], function () {
     Route::post('/token',[AccessTokenController::class,'issueToken'])
         ->middleware('throttle','allowallorigin')->name('token');           
-    
+
     Route::get('/authorize','AuthorizationController@authorize')
-        ->middleware('auth','auth.session','web','allowallorigin')->name('authorizations.authorize');
+        ->middleware('auth','auth.session','web','allowallorigin','checkoauthperm')
+        ->name('authorizations.authorize');
         
     Route::middleware(['web','auth'])->group(function () {
         Route::post('/token/refresh', [
@@ -113,15 +114,16 @@ Route::group([
             'as' => 'token.refresh',
         ]);
     
-        Route::post('/authorize', [
-            'uses' => 'ApproveAuthorizationController@approve',
-            'as' => 'authorizations.approve',
-        ]);
+        // Don't allow users to self authorize!
+        // Route::post('/authorize', [
+        //     'uses' => 'ApproveAuthorizationController@approve',
+        //     'as' => 'authorizations.approve',
+        // ]);
     
-        Route::delete('/authorize', [
-            'uses' => 'DenyAuthorizationController@deny',
-            'as' => 'authorizations.deny',
-        ]);
+        // Route::delete('/authorize', [
+        //     'uses' => 'DenyAuthorizationController@deny',
+        //     'as' => 'authorizations.deny',
+        // ]);
     
         Route::get('/tokens', [
             'uses' => 'AuthorizedAccessTokenController@forUser',

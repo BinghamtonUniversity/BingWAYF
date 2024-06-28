@@ -10,7 +10,7 @@ class Application extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name','ur','logo','description','auth_type',
+        'name','url','logo','description','auth_type',
         'auth_client_id','public'
     ];
 
