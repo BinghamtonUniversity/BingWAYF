@@ -17,7 +17,7 @@ app.data = <?php echo json_encode($data); ?>;
 window.templates.main = `
     <h1 style="text-align:center;">Welcome @{{user.first_name}} @{{user.last_name}}!</h1>
     <div class="row">
-        <div class="col-sm-offset-3 col-sm-6 ">
+        <div class="col-sm-6 ">
             <div class="well">
                 <h3 style="text-align:center;margin-top:0px;padding-top:0px;">My User Info</h3>
                 <label>User ID: </label> @{{user.id}}<br>
@@ -27,7 +27,7 @@ window.templates.main = `
             </div>
             <div class="well">
                 <h3 style="text-align:center;margin-top:0px;padding-top:0px;">My IDPs</h3>
-                @{{#info}} 
+                @{{#user_idps}} 
                     <label>IDP:</label> @{{idp.name}}<br>
                     <label>Last Login:</label> @{{last_login}}<br>
                     @{{#idp.logo}}
@@ -36,9 +36,38 @@ window.templates.main = `
                     <label>Unique ID:</label> @{{unique_id}}<br>
                     @{{#attributes:key}} 
                         <label>@{{key}}:</label> @{{.}}<br>
-                    @{{/attributes:key}} 
+                    @{{/attributes}} 
                     <hr>
-                @{{/info}}
+                @{{/user_idps}}
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="well">
+                <h3 style="text-align:center;margin-top:0px;padding-top:0px;">My Applications</h3>
+                @{{#user_apps}} 
+                    <label>Application:</label> <a href="@{{application.url}}">@{{application.name}}</a><br>
+                    <label>Status:</label> @{{#approved}}Approved@{{/approved}}@{{^approved}}Not Approved@{{/approved}}<br>
+                    <label>Last Login:</label> @{{last_login}}<br>
+                    @{{#application.logo}}
+                        <label>Logo:</label> @{{application.logo}}<br>
+                    @{{/application.logo}}
+                    @{{application.description}}<br>
+                    <hr>
+                @{{/user_apps}} 
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="well">
+                <h3 style="text-align:center;margin-top:0px;padding-top:0px;">All Applications</h3>
+                @{{#all_apps}} 
+                    <label>Application:</label> <a href="@{{url}}">@{{name}}</a><br>
+                    <label>Public:</label> @{{#public}}Yes@{{/public}}@{{^public}}No@{{/public}}<br>
+                    @{{#logo}}
+                        <label>Logo:</label> @{{logo}}<br>
+                    @{{/logo}}
+                    @{{description}}<br>
+                    <hr>
+                @{{/all_apps}} 
             </div>
         </div>
     </div>

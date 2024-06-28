@@ -25,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
         ini_set('session.cookie_lifetime', 1800);
         Passport::useClientModel(Client::class);
         Passport::tokensExpireIn(now()->addMinutes(5));
+        Passport::personalAccessTokensExpireIn(now()->addMinutes(5));
         Passport::refreshTokensExpireIn(now());    
     }
 }

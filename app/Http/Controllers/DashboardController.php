@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\UserIDP;
-
+use App\Models\UserApplication;
+use App\Models\Application;
 
 class DashboardController extends Controller
 {
@@ -14,8 +15,15 @@ class DashboardController extends Controller
     }
 
     public function home(Request $request) {
-        $info = UserIDP::where('user_id',Auth::user()->id)->with('idp')->get();
-        return view('welcome',['data'=>['info'=>$info,'user'=>Auth::user()]]);
+        $user_idps = UserIDP::where('user_id',Auth::user()->id)->with('idp')->get();
+        $user_apps = UserApplication::where('user_id',Auth::user()->id)->with('application')->get();
+        $all_apps = Application::get();
+        return view('welcome',['data'=>[
+            'user_idps'=>$user_idps,
+            'user_apps'=>$user_apps,
+            'all_apps'=>$all_apps,
+            'user'=>Auth::user()
+        ]]);
     }
 
 }
