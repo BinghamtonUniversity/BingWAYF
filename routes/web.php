@@ -105,7 +105,7 @@ Route::group([
         ->middleware('throttle','allowallorigin')->name('token');           
 
     Route::get('/authorize','AuthorizationController@authorize')
-        ->middleware('auth','auth.session','web','allowallorigin','checkoauthperm')
+        ->middleware('auth','auth.session','web','allowallorigin')
         ->name('authorizations.authorize');
         
     Route::middleware(['web','auth'])->group(function () {
