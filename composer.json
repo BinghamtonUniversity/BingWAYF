@@ -10,7 +10,7 @@
         "laravel/framework": "^10.10",
         "laravel/passport": "^12.2",
         "laravel/sanctum": "^3.3",
-        "laravel/socialite": "^5.14",
+        "laravel/socialite": "^5.15",
         "laravel/tinker": "^2.8",
         "mustache/mustache": "^2.14",
         "onelogin/php-saml": "^4.2",

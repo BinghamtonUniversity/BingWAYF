@@ -75,34 +75,63 @@ class Saml2Controller extends Controller
     }
 
     public function google_redirect(Request $request) {
+        // Construct the RelayState Variable to contain the correct IDP and Redirect URL
+        $relay_state = ['redirect'=>isset(request()->redirect)?request()->redirect:null];
+        $relay_state = strtr(base64_encode(json_encode($relay_state)),'+/=','._-');
+        
         return Socialite::driver('google')
+            ->with(['state' => $relay_state])
             ->redirect();
     }
 
     public function google_callback(Request $request) {
-        $idp_user = Socialite::driver('google')->user();
-
-        $user = User::where('unique_id', $idp_user->getEmail())
-            ->where('idp','google')
-            ->first();
-        if ($user === null) {
-            $user = new User();
-            $user->unique_id = $idp_user->getEmail();
+        $relay_state = json_decode(base64_decode(strtr(request()->state,'._-','+/=')));
+        $redirect = null;
+        if (!is_null($relay_state) & isset($relay_state->redirect)) { 
+            $redirect = $relay_state->redirect;
         }
-        $user->first_name = $idp_user->user['given_name'];
-        $user->last_name = $idp_user->user['family_name'];
-        $user->email = $idp_user->getEmail();
-        $user->idp = 'google';
-        $user->last_login = now();
+
+        $google_user = Socialite::driver('google')->stateless()->user();
+
+        $attributes = [
+            'first_name' => $google_user->user['given_name'],
+            'last_name' => $google_user->user['family_name'],
+            'email' => $google_user->getEmail(),
+        ];
+
+        // We're assuming that the Google IDP is "0" because that is an integer value
+        $userIDP = UserIDP::where('unique_id',$attributes['email'])->where('idp_id',null)->first();
+
+        if (!is_null($userIDP)) {
+            $user = User::where('id',$userIDP->user_id)->first();
+        } else {
+            $user = User::where('email',$attributes['email'])->first();
+            if (is_null($user)) {
+                $user = new User();
+                $user->save();
+            }
+            $userIDP = new UserIDP(['user_id'=>$user->id,'idp_id'=>null,'unique_id'=>$attributes['email']]);
+            $userIDP->save();
+        }
+
+        $userIDP->attributes = null;
+        $userIDP->last_login = now();
+
+        $userIDP->save();
+        $user->first_name = $attributes['first_name'];
+        $user->last_name = $attributes['last_name'];
+        $user->email = $attributes['email'];
         $user->save();
+
         Auth::login($user);
 
-        if (isset($redirect) && $redirect !== null) {
+        if ($redirect !== null) {
             return redirect($redirect);
         } else {
             return redirect(config('saml2_settings.loginRoute'));
         }
     }
+
     /**
      * Generate local sp metadata
      * @return \Illuminate\Http\Response

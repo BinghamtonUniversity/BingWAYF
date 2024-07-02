@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('user_idps', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->index();
-            $table->unsignedBigInteger('idp_id')->index();
+            $table->unsignedBigInteger('idp_id')->nullable()->index();
             $table->string('unique_id')->index();
             $table->json('attributes')->nullable()->default(null);
             $table->timestamp('last_login')->nullable()->default(null);

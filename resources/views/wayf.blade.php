@@ -37,6 +37,11 @@ window.templates.main = `
                         </div>
                     </div>
                 @{{/enabled_idps}}
+
+                <div style="margin-bottom:15px;">
+                    <a href="/idp/google/@{{#redirect}}?redirect=@{{redirect}}@{{/redirect}}" class="btn btn-lg btn-default"><i class="fa fa-google"></i> Google Login</a>
+                </div>
+
                 or
                 <hr>
                 <div id="filter-form"></div>
