@@ -27,12 +27,17 @@ window.templates.main = `
             </div>
             <div class="well">
                 <h3 style="text-align:center;margin-top:0px;padding-top:0px;">My IDPs</h3>
-                @{{#user_idps}} 
-                    <label>IDP:</label> @{{idp.name}}<br>
-                    <label>Last Login:</label> @{{last_login}}<br>
-                    @{{#idp.logo}}
-                        <label>Logo:</label> @{{idp.logo}}<br>
-                    @{{/idp.logo}}
+                @{{#user_idps}}
+                    @{{#idp}}
+                        <label>IDP:</label> @{{idp.name}}<br>
+                        <label>Last Login:</label> @{{last_login}}<br>
+                        @{{#idp.logo}}
+                            <label>Logo:</label> @{{idp.logo}}<br>
+                        @{{/idp.logo}}
+                    @{{/idp}}
+                    @{{^idp}}
+                        <label>IDP:</label> Google<br>
+                    @{{/idp}}
                     <label>Unique ID:</label> @{{unique_id}}<br>
                     @{{#attributes:key}} 
                         <label>@{{key}}:</label> @{{.}}<br>

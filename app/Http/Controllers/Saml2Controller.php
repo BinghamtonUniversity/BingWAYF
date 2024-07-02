@@ -114,7 +114,7 @@ class Saml2Controller extends Controller
             $userIDP->save();
         }
 
-        $userIDP->attributes = null;
+        $userIDP->attributes = $google_user->user;
         $userIDP->last_login = now();
 
         $userIDP->save();
