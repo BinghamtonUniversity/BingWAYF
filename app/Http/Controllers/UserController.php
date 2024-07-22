@@ -64,9 +64,13 @@ class UserController extends Controller
     public function update_user_application(Request $request, User $user, UserApplication $user_application) {
         $user_application->approved = $request->approved;
         $user_application->save();
+        if (!$user_application->approved) {
+            $user->force_logout($user_application);
+        }
         return $user_application;
     }
     public function delete_user_application(Request $request, User $user, UserApplication $user_application) {
+        $user->force_logout($user_application);
         $user_application->delete();
         return "1";
     }
