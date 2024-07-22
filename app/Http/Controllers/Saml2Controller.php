@@ -272,18 +272,15 @@ class Saml2Controller extends Controller
      * This initiates a logout request across all the SSO infrastructure.
      */
     public function logout(Request $request) {
-        Auth::user()->force_logout();
-        Auth::logout();
+        if (Auth::check()) {
+            Auth::user()->force_logout();
+            Auth::logout();
+        }
         Session::save();    
         $returnTo = $request->query('returnTo');
         $sessionIndex = $request->query('sessionIndex');
         $nameId = $request->query('nameId');
         $full_logout = true;
-        // try {
-        //     $this->saml2Auth->logout($returnTo, $nameId, $sessionIndex); //will actually end up in the sls endpoint
-        // } catch (\Exception $e) {
-        //     $full_logout = false;
-        // }
         return view('logout',['full_logout' => $full_logout]);
     }
 
