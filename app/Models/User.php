@@ -30,11 +30,11 @@ class User extends Authenticatable
             if (!is_null($application) && $application->auth_type === 'openid') {
                 $access_tokens = DB::table('oauth_access_tokens')->select('id')
                     ->where('user_id',$this->id)
-                    ->where('client_id',$user_application->auth_client_id)
+                    ->where('client_id',$application->auth_client_id)
                     ->get()->pluck('id');
                 $auth_codes = DB::table('oauth_auth_codes')->select('id')
                     ->where('user_id',$this->id)
-                    ->where('client_id',$user_application->auth_client_id)
+                    ->where('client_id',$application->auth_client_id)
                     ->get()->pluck('id');
             }
         }
