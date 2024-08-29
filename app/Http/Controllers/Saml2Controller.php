@@ -280,7 +280,9 @@ class Saml2Controller extends Controller
             'email' => $m->render($data_map['email'], $saml_attributes),
         ];
 
-        $user_idp = UserIDP::where('unique_id',$attributes['unique_id'])->where('idp_id',$id)->first();
+        $user_idp = UserIDP::where('unique_id',$attributes['unique_id'])
+            ->where('type','saml2')
+            ->where('idp_id',$id)->first();
         
         if (!is_null($user_idp)) {
             $user = User::where('id',$user_idp->user_id)->first();
@@ -290,7 +292,7 @@ class Saml2Controller extends Controller
                 $user = new User();
                 $user->save();
             }
-            $user_idp = new UserIDP(['user_id'=>$user->id,'idp_id'=>$id,'unique_id'=>$attributes['unique_id']]);
+            $user_idp = new UserIDP(['user_id'=>$user->id,'type'=>'saml2','idp_id'=>$id,'unique_id'=>$attributes['unique_id']]);
             $user_idp->save();
         }
 
