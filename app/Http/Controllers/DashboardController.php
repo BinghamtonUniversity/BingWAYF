@@ -15,7 +15,7 @@ class DashboardController extends Controller
     }
 
     public function home(Request $request) {
-        $user_idps = UserIDP::where('user_id',Auth::user()->id)->with('idp')->get();
+        $user_idps = UserIDP::where('user_id',Auth::user()->id)->with('saml2_idp')->get();
         $user_apps = UserApplication::where('user_id',Auth::user()->id)->with('application')->get();
         $all_apps = Application::get();
         return view('welcome',['data'=>[

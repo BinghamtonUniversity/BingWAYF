@@ -7,7 +7,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use App\Libraries\SAML2AuthWrapper;
 use App\Models\User;
-use App\Models\IDP;
+use App\Models\SAML2IDP;
 use App\Models\UserIDP;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -31,7 +31,7 @@ class Saml2Controller extends Controller
         if(!Auth::user()){
             $contents = view('wayf',['data'=>[
                 'redirect'=> urlencode($request->redirect),
-                'enabled_idps' => IDP::select('name','id','enabled')
+                'enabled_idps' => SAML2IDP::select('name','id','enabled')
                     ->where('enabled',true)
                     ->orderBy('order','asc')->orderBy('id','asc')->get()
             ]]);
@@ -44,18 +44,18 @@ class Saml2Controller extends Controller
         }  
     }
 
-    public function get_idps(Request $request, IDP $idp = null) {
+    public function get_idps(Request $request, SAML2IDP $idp = null) {
         if (!is_null($idp)) {
             return $idp;
         } else {
-            return IDP::select('name','id','enabled')
+            return SAML2IDP::select('name','id','enabled')
                 ->orderBy('order','asc')->orderBy('id','asc')->get();
         }
     }
 
     public function wayfcallback($id) {
         if(!Auth::user()){
-            $idp = IDP::where('id',$id)->first();
+            $idp = SAML2IDP::where('id',$id)->first();
             config(['saml2_settings.idp' => [
                 'name' => $idp->name,
                 'entityId' => $idp->entityId,
@@ -65,7 +65,7 @@ class Saml2Controller extends Controller
                 'data_map' => $idp->config
             ]]);
             $this->saml2Auth->configure();
-            // Construct the RelayState Variable to contain the correct IDP and Redirect URL
+            // Construct the RelayState Variable to contain the correct SAML2IDP and Redirect URL
             $relay_state = ['idp'=>$id,'redirect'=>isset(request()->redirect)?request()->redirect:null];
             $relay_state = strtr(base64_encode(json_encode($relay_state)),'+/=','._-');
             return $this->saml2Auth->login($relay_state);
@@ -75,7 +75,7 @@ class Saml2Controller extends Controller
     }
 
     public function google_redirect(Request $request) {
-        // Construct the RelayState Variable to contain the correct IDP and Redirect URL
+        // Construct the RelayState Variable to contain the correct SAML2IDP and Redirect URL
         $relay_state = ['redirect'=>isset(request()->redirect)?request()->redirect:null];
         $relay_state = strtr(base64_encode(json_encode($relay_state)),'+/=','._-');
         
@@ -99,25 +99,25 @@ class Saml2Controller extends Controller
             'email' => $google_user->getEmail(),
         ];
 
-        // We're assuming that the Google IDP is "0" because that is an integer value
-        $userIDP = UserIDP::where('unique_id',$attributes['email'])->where('idp_id',null)->first();
+        // We're assuming that the Google SAML2IDP is "0" because that is an integer value
+        $user_idp = UserIDP::where('unique_id',$attributes['email'])->where('type','google')->first();
 
-        if (!is_null($userIDP)) {
-            $user = User::where('id',$userIDP->user_id)->first();
+        if (!is_null($user_idp)) {
+            $user = User::where('id',$user_idp->user_id)->first();
         } else {
             $user = User::where('email',$attributes['email'])->first();
             if (is_null($user)) {
                 $user = new User();
                 $user->save();
             }
-            $userIDP = new UserIDP(['user_id'=>$user->id,'idp_id'=>null,'unique_id'=>$attributes['email']]);
-            $userIDP->save();
+            $user_idp = new UserIDP(['user_id'=>$user->id,'type'=>'google','idp_id'=>null,'unique_id'=>$attributes['email']]);
+            $user_idp->save();
         }
 
-        $userIDP->attributes = $google_user->user;
-        $userIDP->last_login = now();
+        $user_idp->attributes = $google_user->user;
+        $user_idp->last_login = now();
 
-        $userIDP->save();
+        $user_idp->save();
         $user->first_name = $attributes['first_name'];
         $user->last_name = $attributes['last_name'];
         $user->email = $attributes['email'];
@@ -131,6 +131,64 @@ class Saml2Controller extends Controller
             return redirect(config('saml2_settings.loginRoute'));
         }
     }
+
+    public function azure_redirect(Request $request) {
+        // Construct the RelayState Variable to contain the correct SAML2IDP and Redirect URL
+        $relay_state = ['redirect'=>isset(request()->redirect)?request()->redirect:null];
+        $relay_state = strtr(base64_encode(json_encode($relay_state)),'+/=','._-');
+        
+        return Socialite::driver('azure')
+            ->with(['state' => $relay_state])
+            ->redirect();
+    }
+
+    public function azure_callback(Request $request) {
+        $relay_state = json_decode(base64_decode(strtr(request()->state,'._-','+/=')));
+        $redirect = null;
+        if (!is_null($relay_state) & isset($relay_state->redirect)) { 
+            $redirect = $relay_state->redirect;
+        }
+
+        $azure_user = Socialite::driver('azure')->stateless()->user();
+        $attributes = [
+            'first_name' => $azure_user->user['givenName'],
+            'last_name' => $azure_user->user['surname'],
+            'email' => $azure_user->getEmail(),
+        ];
+
+        // We're assuming that the Azure SAML2IDP is "0" because that is an integer value
+        $user_idp = UserIDP::where('unique_id',$attributes['email'])->where('type','azure')->first();
+
+        if (!is_null($user_idp)) {
+            $user = User::where('id',$user_idp->user_id)->first();
+        } else {
+            $user = User::where('email',$attributes['email'])->first();
+            if (is_null($user)) {
+                $user = new User();
+                $user->save();
+            }
+            $user_idp = new UserIDP(['user_id'=>$user->id,'type'=>'azure','idp_id'=>null,'unique_id'=>$attributes['email']]);
+            $user_idp->save();
+        }
+
+        $user_idp->attributes = $azure_user->user;
+        $user_idp->last_login = now();
+
+        $user_idp->save();
+        $user->first_name = $attributes['first_name'];
+        $user->last_name = $attributes['last_name'];
+        $user->email = $attributes['email'];
+        $user->save();
+
+        Auth::login($user);
+
+        if ($redirect !== null) {
+            return redirect($redirect);
+        } else {
+            return redirect(config('saml2_settings.loginRoute'));
+        }
+    }
+
 
     /**
      * Generate local sp metadata
@@ -146,7 +204,7 @@ class Saml2Controller extends Controller
      * Fires 'Saml2LoginEvent' event if a valid user is Found
      */
     public function acs() {
-        // Deconstruct the RelayState Variable to fetch the correct IDP and Redirect URL
+        // Deconstruct the RelayState Variable to fetch the correct SAML2IDP and Redirect URL
         $relay_state = json_decode(base64_decode(strtr(request()->input('RelayState'),'._-','+/=')));
         if (is_null($relay_state) || !isset($relay_state->idp) || is_null($relay_state->idp)) {
             return redirect('login');
@@ -155,7 +213,7 @@ class Saml2Controller extends Controller
         $id = $relay_state->idp;
         $redirect = $relay_state->redirect;
         
-        $idp = IDP::where('id',$id)->first();
+        $idp = SAML2IDP::where('id',$id)->first();
         if (is_null($idp)) {
             return redirect('login');
         }
@@ -222,24 +280,24 @@ class Saml2Controller extends Controller
             'email' => $m->render($data_map['email'], $saml_attributes),
         ];
 
-        $userIDP = UserIDP::where('unique_id',$attributes['unique_id'])->where('idp_id',$id)->first();
+        $user_idp = UserIDP::where('unique_id',$attributes['unique_id'])->where('idp_id',$id)->first();
         
-        if (!is_null($userIDP)) {
-            $user = User::where('id',$userIDP->user_id)->first();
+        if (!is_null($user_idp)) {
+            $user = User::where('id',$user_idp->user_id)->first();
         } else {
             $user = User::where('email',$attributes['unique_id'])->first();
             if (is_null($user)) {
                 $user = new User();
                 $user->save();
             }
-            $userIDP = new UserIDP(['user_id'=>$user->id,'idp_id'=>$id,'unique_id'=>$attributes['unique_id']]);
-            $userIDP->save();
+            $user_idp = new UserIDP(['user_id'=>$user->id,'idp_id'=>$id,'unique_id'=>$attributes['unique_id']]);
+            $user_idp->save();
         }
 
-        $userIDP->attributes = $saml_attributes;
-        $userIDP->last_login = now();
+        $user_idp->attributes = $saml_attributes;
+        $user_idp->last_login = now();
 
-        $userIDP->save();
+        $user_idp->save();
         $user->first_name = $attributes['first_name'];
         $user->last_name = $attributes['last_name'];
         $user->email = $attributes['email'];
@@ -288,7 +346,7 @@ class Saml2Controller extends Controller
         $idps = [];
         $idps[] = ['value'=>null,'label'=>'None'];
         $idps[] = ['value'=>'google','label'=>'Google'];
-        $allidps = IDP::get();
+        $allidps = SAML2IDP::get();
         foreach($allidps as $idp) {
             $idps[] = ['value'=>$idp->id, 'label'=>$idp->name];
         }

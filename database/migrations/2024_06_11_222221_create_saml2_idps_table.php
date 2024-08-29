@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('idps', function (Blueprint $table) {
+        Schema::create('saml2_idps', function (Blueprint $table) {
             $table->id();
             $table->string('entityId')->unique();
             $table->string('name');

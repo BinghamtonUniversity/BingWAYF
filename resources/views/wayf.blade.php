@@ -44,6 +44,11 @@ window.templates.main = `
                         Sign in with Google
                     </a>
                 </div>
+                <div style="margin-bottom:15px;">
+                    <a href="/idp/azure/@{{#redirect}}?redirect=@{{redirect}}@{{/redirect}}" class="btn btn-lg btn-default">
+                        Sign in with Azure
+                    </a>
+                </div>
 
                 or
                 <hr>

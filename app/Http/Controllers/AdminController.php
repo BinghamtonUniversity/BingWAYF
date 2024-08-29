@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\IDP;
+use App\Models\SAML2IDP;
 use App\Models\Application;
 
 class AdminController extends Controller
@@ -74,7 +74,7 @@ class AdminController extends Controller
         ]);
     }
 
-    public function idp_users(Request $request, IDP $idp) {
+    public function idp_users(Request $request, SAML2IDP $idp) {
         $identity = Auth::user();
         $actions = [];
         return view('default.admin',[

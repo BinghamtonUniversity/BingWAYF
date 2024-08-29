@@ -54,8 +54,8 @@ class User extends Authenticatable
         return $this->hasMany(UserApplication::class,'user_id');
     }
 
-    public function idps() {
-        return $this->belongsToMany(IDP::class,'user_idps','user_id','idp_id')->select('idps.id','entityId','name','logo')->withPivot('id','unique_id','attributes');
+    public function saml2_idps() {
+        return $this->belongsToMany(SAML2IDP::class,'user_idps','user_id','idp_id')->select('idps.id','entityId','name','logo')->withPivot('id','unique_id','attributes');
     }
 
     public function applications() {

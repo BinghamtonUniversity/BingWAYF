@@ -5,16 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class IDP extends Model
+class SAML2IDP extends Model
 {
     use HasFactory;
 
-    protected $table = 'idps';
+    protected $table = 'saml2_idps';
     protected $fillable = ['entityId','name','singleSignOnServiceUrl','singleLogoutServiceUrl','x509cert','logo','config','enabled','debug','order'];
     protected $casts = ['config' => 'json','enabled' => 'boolean','debug' => 'boolean'];
 
     public function idp_users(){
-        return $this->hasMany(UserIDP::class,'idp_id');
+        return $this->hasMany(UserIDP::class,'idp_id')->where('type','saml2');
     }
 
     public function users() {
