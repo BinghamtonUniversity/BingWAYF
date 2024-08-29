@@ -47,7 +47,7 @@ window.templates.main = `
                 <div style="margin-bottom:15px;">
                     <a href="/idp/azure/@{{#redirect}}?redirect=@{{redirect}}@{{/redirect}}" class="btn btn-lg btn-default">
                         <img width="18px" height="18px" src="https://portal.azure.com/Content/favicon.ico">
-                        Sign in with Azure
+                        Sign in with Microsoft (Azure)
                     </a>
                 </div>
 
