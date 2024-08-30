@@ -10,7 +10,7 @@ class UserIDP extends Model
     use HasFactory;
 
     protected $table = 'user_idps';
-    protected $fillable = ['idp_id','user_id','unique_id','attributes','last_login'];
+    protected $fillable = ['idp_id','type','user_id','unique_id','attributes','last_login'];
     protected $casts = [
         'user_id' => 'integer',
         'idp_id' => 'integer',

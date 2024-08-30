@@ -70,8 +70,8 @@ Route::get('/login', [Saml2Controller::class, 'wayf'])->name('login');
 Route::any('/idp/demo', [DemoController::class, 'list']);
 Route::get('/idp/google', [Saml2Controller::class, 'google_redirect']);
 Route::get('/idp/google/callback', [Saml2Controller::class, 'google_callback']);
-Route::get('/idp/azure', [Saml2Controller::class, 'azure_redirect']);
-Route::get('/idp/azure/callback', [Saml2Controller::class, 'azure_callback']);
+Route::get('/idp/microsoft', [Saml2Controller::class, 'microsoft_redirect']);
+Route::get('/idp/microsoft/callback', [Saml2Controller::class, 'microsoft_callback']);
 Route::get('/logout', [Saml2Controller::class, 'logout'])->name('saml_logout');
 Route::get('/health', [Saml2Controller::class, 'health'])->name('health_check');
 

@@ -132,32 +132,32 @@ class Saml2Controller extends Controller
         }
     }
 
-    public function azure_redirect(Request $request) {
+    public function microsoft_redirect(Request $request) {
         // Construct the RelayState Variable to contain the correct SAML2IDP and Redirect URL
         $relay_state = ['redirect'=>isset(request()->redirect)?request()->redirect:null];
         $relay_state = strtr(base64_encode(json_encode($relay_state)),'+/=','._-');
         
-        return Socialite::driver('azure')
+        return Socialite::driver('microsoft')
             ->with(['state' => $relay_state])
             ->redirect();
     }
 
-    public function azure_callback(Request $request) {
+    public function microsoft_callback(Request $request) {
         $relay_state = json_decode(base64_decode(strtr(request()->state,'._-','+/=')));
         $redirect = null;
         if (!is_null($relay_state) & isset($relay_state->redirect)) { 
             $redirect = $relay_state->redirect;
         }
 
-        $azure_user = Socialite::driver('azure')->stateless()->user();
+        $microsoft_user = Socialite::driver('microsoft')->stateless()->user();
         $attributes = [
-            'first_name' => $azure_user->user['givenName'],
-            'last_name' => $azure_user->user['surname'],
-            'email' => $azure_user->getEmail(),
+            'first_name' => $microsoft_user->user['givenName'],
+            'last_name' => $microsoft_user->user['surname'],
+            'email' => $microsoft_user->getEmail(),
         ];
 
-        // We're assuming that the Azure SAML2IDP is "0" because that is an integer value
-        $user_idp = UserIDP::where('unique_id',$attributes['email'])->where('type','azure')->first();
+        // We're assuming that the microsoft SAML2IDP is "0" because that is an integer value
+        $user_idp = UserIDP::where('unique_id',$attributes['email'])->where('type','microsoft')->first();
 
         if (!is_null($user_idp)) {
             $user = User::where('id',$user_idp->user_id)->first();
@@ -167,11 +167,11 @@ class Saml2Controller extends Controller
                 $user = new User();
                 $user->save();
             }
-            $user_idp = new UserIDP(['user_id'=>$user->id,'type'=>'azure','idp_id'=>null,'unique_id'=>$attributes['email']]);
+            $user_idp = new UserIDP(['user_id'=>$user->id,'type'=>'microsoft','idp_id'=>null,'unique_id'=>$attributes['email']]);
             $user_idp->save();
         }
 
-        $user_idp->attributes = $azure_user->user;
+        $user_idp->attributes = $microsoft_user->user;
         $user_idp->last_login = now();
 
         $user_idp->save();

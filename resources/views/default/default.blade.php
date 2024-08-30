@@ -48,7 +48,9 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="/" style="background:#014634;color:white;padding: 0px 0px 0px 25px;">
-            <h3 style="color:#fff;margin-top:12px;"><i class="fa fa-share"></i> BingWAYF</h3>
+            <h3 style="color:#fff;margin-top:6px;"><i class="fa fa-share"></i> BingWAYF<br>
+              <span style="font-size:10px;height:10px;display:block;margin-left:40px;">Where are you from?</span>
+            </h3>
           </a>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
