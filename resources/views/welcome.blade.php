@@ -28,17 +28,15 @@ window.templates.main = `
             <div class="well">
                 <h3 style="text-align:center;margin-top:0px;padding-top:0px;">My IDPs</h3>
                 @{{#user_idps}}
-                    @{{#idp}}
-                        <label>IDP:</label> @{{idp.name}}<br>
-                        <label>Last Login:</label> @{{last_login}}<br>
-                        @{{#idp.logo}}
-                            <label>Logo:</label> @{{idp.logo}}<br>
-                        @{{/idp.logo}}
-                    @{{/idp}}
-                    @{{^idp}}
-                        <label>IDP:</label> Google<br>
-                    @{{/idp}}
+                    <label>Type:</label> @{{type}}<br>
+                    @{{#saml2_idp}}
+                        <label>IDP:</label> @{{saml2_idp.name}}<br>
+                        @{{#saml2_idp.logo}}
+                            <label>Logo:</label> @{{saml2_idp.logo}}<br>
+                        @{{/saml2_idp.logo}}
+                    @{{/saml2_idp}}
                     <label>Unique ID:</label> @{{unique_id}}<br>
+                    <label>Last Login:</label> @{{last_login}}<br>
                     @{{#attributes:key}} 
                         <label>@{{key}}:</label> @{{.}}<br>
                     @{{/attributes}} 

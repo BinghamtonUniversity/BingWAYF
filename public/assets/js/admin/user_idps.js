@@ -14,6 +14,7 @@ app.get('/api/users/'+app.data.id+'/idps',function(all_user_idps) {
         count:20,
         schema:[
             {label: 'ID', name:'id', type:'hidden'},
+            {label: 'Type', name:'type'},
             {label: 'IDP', name:'idp_id',type:'select',options:'/api/idps',format:{label:"{{name}}", value:"{{id}}"}},
             {label: 'Unique ID', name:'unique_id'},
             {label: 'Attributes', name:'attributes',template:"{{#attributes.attributes}}<b>{{key}}:</b> {{value}}<br>{{/attributes.attributes}}"},

@@ -22,7 +22,7 @@ class UserIDP extends Model
     }
 
     public function saml2_idp(){
-        return $this->belongsTo(SAML2IDP::class)->select('idps.id','entityId','name','logo');
+        return $this->belongsTo(SAML2IDP::class,'idp_id')->select('saml2_idps.id','entityId','name','logo');
     }
 
 }
