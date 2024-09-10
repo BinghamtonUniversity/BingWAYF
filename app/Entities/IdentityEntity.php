@@ -41,7 +41,7 @@ class IdentityEntity implements IdentityEntityInterface
             'family_name' => $this->user->last_name,
             'name' => $this->user->first_name.' '.$this->user->last_name,
             'sub' => strval($this->user->id),
-            'preferred_username' => 'bingwayf-'.$this->user->id,
+            'preferred_username' => 'bing-'.$this->user->id,
             'groups' => $this->user->groups->pluck('slug')->merge(['users']),
         ];
     }
