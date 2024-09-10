@@ -13,6 +13,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\IDPController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\SocialLoginController;
+use App\Models\User;
 
 /* GENERIC STUFF */
 Route::middleware(['auth','auth.session'])->group(function () {

@@ -12,7 +12,7 @@ class UserController extends Controller
     public function __construct() {
     }
     public function get_users(Request $request) {
-        $users = User::select('id','first_name','last_name','email')->get();
+        $users = User::select('id','first_name','last_name','email','admin')->get();
         return $users;
     }
     public function add_user(Request $request) {

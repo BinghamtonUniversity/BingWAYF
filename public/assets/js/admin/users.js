@@ -11,6 +11,7 @@ app.get('/api/users',function(all_users) {
             {label:'First Name', name: 'first_name'},
             {label:'Last Name', name: 'last_name'},
             {label:'Email', name: 'email'},
+            {label:'Admin', name: 'admin', type: 'checkbox'},
         ], 
         data: _.reverse(all_users)
     }).on("model:view_idps",function(grid_event) {
