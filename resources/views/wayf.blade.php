@@ -52,10 +52,8 @@ window.templates.main = `
                         </a>
                     </div>
                 </div>
-
                 or
-                <hr>
-                <div id="filter-form"></div>
+                <div id="filter-form" style="margin-top:10px;"></div>
                 <div style="max-height:300px;overflow:scroll;">
                     <ul class="list-group"> 
                         @{{#show_filtered_idps}}

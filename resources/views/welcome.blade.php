@@ -43,6 +43,16 @@ window.templates.main = `
                     <hr>
                 @{{/user_idps}}
             </div>
+            <div class="well">
+                <h3 style="text-align:center;margin-top:0px;padding-top:0px;">My OpenID Claims</h3>
+                <label>email:</label> @{{claims.email}}<br>
+                <label>given_name:</label> @{{claims.given_name}}<br>
+                <label>family_name:</label> @{{claims.family_name}}<br>
+                <label>name:</label> @{{claims.name}}<br>
+                <label>sub:</label> @{{claims.sub}}<br>
+                <label>preferred_username:</label> @{{claims.preferred_username}}<br>
+                <label>groups:</label> @{{#claims.groups}}@{{.}}, @{{/claims.groups}}<br>
+            </div>
         </div>
         <div class="col-sm-3">
             <div class="well">

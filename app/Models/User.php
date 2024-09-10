@@ -13,8 +13,10 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $fillable = ['first_name','last_name','email'];
-    protected $casts = [];
+    protected $fillable = ['first_name','last_name','email','admin'];
+    protected $casts = [
+        'admin'=>'boolean'
+    ];
 
     public function force_logout(UserApplication $user_application = null) {
         $access_tokens = []; $auth_codes = [];
@@ -60,6 +62,10 @@ class User extends Authenticatable
 
     public function applications() {
         return $this->belongsToMany(Application::class,'user_applications','user_id','application_id')->withPivot('id','approved');
+    }
+
+    public function groups() {
+        return $this->belongsToMany(Group::class,'group_members','user_id','group_id');
     }
 
 }

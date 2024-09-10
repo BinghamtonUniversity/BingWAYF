@@ -42,7 +42,7 @@ class IdentityEntity implements IdentityEntityInterface
             'name' => $this->user->first_name.' '.$this->user->last_name,
             'sub' => strval($this->user->id),
             'preferred_username' => 'bingwayf-'.$this->user->id,
-            'groups' => ['coolguys','wayfusers'],
+            'groups' => $this->user->groups->pluck('slug')->merge(['users']),
         ];
     }
 }

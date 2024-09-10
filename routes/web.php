@@ -12,53 +12,57 @@ use App\Http\Controllers\OAuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\IDPController;
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\SocialLoginController;
 
 /* GENERIC STUFF */
 Route::middleware(['auth','auth.session'])->group(function () {
     Route::get('/', [DashboardController::class, 'home']);
-    Route::get('/admin', function (Request $request) {
-        return redirect('/admin/users');
+
+    Route::group(['prefix' => 'admin'], function () {
+        Route::get('/', function (Request $request) {
+            return redirect('/admin/users');
+        })->can('admin',User::class);
+        Route::get('/users', [AdminController::class, 'users'])->can('admin',User::class);
+        Route::get('/users/{user}/idps', [AdminController::class, 'user_idps'])->can('admin',User::class);
+        Route::get('/users/{user}/applications', [AdminController::class, 'user_applications'])->can('admin',User::class);
+        Route::get('/idps', [AdminController::class, 'idps'])->can('admin',User::class);
+        Route::get('/idps/{idp}/users', [AdminController::class, 'idp_users'])->can('admin',User::class);
+        Route::get('/oauth_clients', [AdminController::class, 'oauth_clients'])->can('admin',User::class);
+        Route::get('/applications', [AdminController::class, 'applications'])->can('admin',User::class);
+        Route::get('/applications/{application}/users', [AdminController::class, 'application_users'])->can('admin',User::class);    
     });
-    Route::get('/admin/users', [AdminController::class, 'users']);
-    Route::get('/admin/users/{user}/idps', [AdminController::class, 'user_idps']);
-    Route::get('/admin/users/{user}/applications', [AdminController::class, 'user_applications']);
-    Route::get('/admin/idps', [AdminController::class, 'idps']);
-    Route::get('/admin/idps/{idp}/users', [AdminController::class, 'idp_users']);
-    Route::get('/admin/oauth_clients', [AdminController::class, 'oauth_clients']);
-    Route::get('/admin/applications', [AdminController::class, 'applications']);
-    Route::get('/admin/applications/{application}/users', [AdminController::class, 'application_users']);
 
     Route::group(['prefix' => 'api'], function () {
-        Route::get('/users',[UserController::class,'get_users']);
-        Route::post('/users',[UserController::class,'add_user']);
-        Route::put('/users/{user}',[UserController::class,'update_user']);
-        Route::delete('/users/{user}',[UserController::class,'delete_user']);
-        Route::get('/users/{user}/idps',[UserController::class,'get_user_idps']);
-        Route::post('/users/{user}/idps',[UserController::class,'add_user_idp']);
-        Route::put('/users/{user}/idps/{user_idp}',[UserController::class,'update_user_idp']);
-        Route::delete('/users/{user}/idps/{user_idp}',[UserController::class,'delete_user_idp']);
-        Route::get('/users/{user}/applications',[UserController::class,'get_user_applications']);
-        Route::post('/users/{user}/applications',[UserController::class,'add_user_application']);
-        Route::put('/users/{user}/applications/{user_application}',[UserController::class,'update_user_application']);
-        Route::delete('/users/{user}/applications/{user_application}',[UserController::class,'delete_user_application']);
+        Route::get('/users',[UserController::class,'get_users'])->can('admin',User::class);
+        Route::post('/users',[UserController::class,'add_user'])->can('admin',User::class);
+        Route::put('/users/{user}',[UserController::class,'update_user'])->can('admin',User::class);
+        Route::delete('/users/{user}',[UserController::class,'delete_user'])->can('admin',User::class);
+        Route::get('/users/{user}/idps',[UserController::class,'get_user_idps'])->can('admin',User::class);
+        Route::post('/users/{user}/idps',[UserController::class,'add_user_idp'])->can('admin',User::class);
+        Route::put('/users/{user}/idps/{user_idp}',[UserController::class,'update_user_idp'])->can('admin',User::class);
+        Route::delete('/users/{user}/idps/{user_idp}',[UserController::class,'delete_user_idp'])->can('admin',User::class);
+        Route::get('/users/{user}/applications',[UserController::class,'get_user_applications'])->can('admin',User::class);
+        Route::post('/users/{user}/applications',[UserController::class,'add_user_application'])->can('admin',User::class);
+        Route::put('/users/{user}/applications/{user_application}',[UserController::class,'update_user_application'])->can('admin',User::class);
+        Route::delete('/users/{user}/applications/{user_application}',[UserController::class,'delete_user_application'])->can('admin',User::class);
         
-        Route::get('/idps',[IDPController::class,'get_idps']);
-        Route::post('/idps',[IDPController::class,'add_idp']);
-        Route::put('/idps/{idp}',[IDPController::class,'update_idp']);
-        Route::delete('/idps/{idp}',[IDPController::class,'delete_idp']);
-        Route::get('/idps/{idp}/users',[IDPController::class,'get_idp_users']);
+        Route::get('/idps',[IDPController::class,'get_idps'])->can('admin',User::class);
+        Route::post('/idps',[IDPController::class,'add_idp'])->can('admin',User::class);
+        Route::put('/idps/{idp}',[IDPController::class,'update_idp'])->can('admin',User::class);
+        Route::delete('/idps/{idp}',[IDPController::class,'delete_idp'])->can('admin',User::class);
+        Route::get('/idps/{idp}/users',[IDPController::class,'get_idp_users'])->can('admin',User::class);
         
-        Route::get('/applications',[ApplicationController::class,'get_applications']);
+        Route::get('/applications',[ApplicationController::class,'get_applications'])->can('admin',User::class);
         Route::post('/applications',[ApplicationController::class,'add_application']);
-        Route::put('/applications/{application}',[ApplicationController::class,'update_application']);
-        Route::delete('/applications/{application}',[ApplicationController::class,'delete_application']);
-        Route::get('/applications/{application}/users',[ApplicationController::class,'get_application_users']);
+        Route::put('/applications/{application}',[ApplicationController::class,'update_application'])->can('admin',User::class);
+        Route::delete('/applications/{application}',[ApplicationController::class,'delete_application'])->can('admin',User::class);
+        Route::get('/applications/{application}/users',[ApplicationController::class,'get_application_users'])->can('admin',User::class);
 
-        Route::get('/oauth_clients',[OAuthController::class,'get_clients']);
-        Route::post('/oauth_clients',[OAuthController::class,'add_client']);
-        Route::put('/oauth_clients/{client}',[OAuthController::class,'update_client']);
-        Route::delete('/oauth_clients/{client}',[OAuthController::class,'delete_client']);
-        Route::delete('/oauth_clients/{client}/regenerate_secret',[OAuthController::class,'regenerate_secret']);
+        Route::get('/oauth_clients',[OAuthController::class,'get_clients'])->can('admin',User::class);
+        Route::post('/oauth_clients',[OAuthController::class,'add_client'])->can('admin',User::class);
+        Route::put('/oauth_clients/{client}',[OAuthController::class,'update_client'])->can('admin',User::class);
+        Route::delete('/oauth_clients/{client}',[OAuthController::class,'delete_client'])->can('admin',User::class);
+        Route::delete('/oauth_clients/{client}/regenerate_secret',[OAuthController::class,'regenerate_secret'])->can('admin',User::class);
     });
 });
 
@@ -67,13 +71,12 @@ Route::get('/forcelogin', function (Request $request) {
 });
 
 Route::get('/login', [Saml2Controller::class, 'wayf'])->name('login');
-Route::any('/idp/demo', [DemoController::class, 'list']);
-Route::get('/idp/google', [Saml2Controller::class, 'google_redirect']);
-Route::get('/idp/google/callback', [Saml2Controller::class, 'google_callback']);
-Route::get('/idp/microsoft', [Saml2Controller::class, 'microsoft_redirect']);
-Route::get('/idp/microsoft/callback', [Saml2Controller::class, 'microsoft_callback']);
 Route::get('/logout', [Saml2Controller::class, 'logout'])->name('saml_logout');
 Route::get('/health', [Saml2Controller::class, 'health'])->name('health_check');
+Route::get('/idp/google', [SocialLoginController::class, 'google_redirect']);
+Route::get('/idp/google/callback', [SocialLoginController::class, 'google_callback']);
+Route::get('/idp/microsoft', [SocialLoginController::class, 'microsoft_redirect']);
+Route::get('/idp/microsoft/callback', [SocialLoginController::class, 'microsoft_callback']);
 
 /* SAML Stuff */
 Route::prefix('/saml2')->group(function () {
