@@ -31,6 +31,7 @@ class ScopeRepository implements ScopeRepositoryInterface
             'phone' => ['description' => 'Information about your phone numbers'],
             'address' => ['description' => 'Information about your address'],
             'groups' => ['description' => 'View all group memberships'],
+            'offline_access' => ['description' => 'Enable Offline Access'],
         ];
 
         if (array_key_exists($identifier, $scopes) === false) {

@@ -16,6 +16,7 @@ return [
             'phone' => 'Information about your phone numbers',
             'address' => 'Information about your address',
             'groups' => 'View all group memberships',
+            'offline_access' => 'Enable Offline Access',
         ],
     ],
 

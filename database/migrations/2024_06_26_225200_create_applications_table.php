@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('logo')->nullable()->default(null);
             $table->text('description')->nullable()->default(null);
             $table->enum('auth_type', ['openid','oauth','cas','saml2']);
-            $table->unsignedBigInteger('auth_client_id')->index();
+            $table->char('auth_client_id')->index(); // "uuid type isn't long enough for owncloud client ids
             $table->boolean('public')->false();
             $table->timestamps();
         });
