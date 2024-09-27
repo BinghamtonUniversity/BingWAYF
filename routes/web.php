@@ -42,6 +42,7 @@ Route::middleware(['auth','auth.session'])->group(function () {
         Route::post('/users/{user}/idps',[UserController::class,'add_user_idp'])->can('admin',User::class);
         Route::put('/users/{user}/idps/{user_idp}',[UserController::class,'update_user_idp'])->can('admin',User::class);
         Route::delete('/users/{user}/idps/{user_idp}',[UserController::class,'delete_user_idp'])->can('admin',User::class);
+        Route::post('/users/{user}/impersonate',[UserController::class,'impersonate'])->can('admin',User::class);
         Route::get('/users/{user}/applications',[UserController::class,'get_user_applications'])->can('admin',User::class);
         Route::post('/users/{user}/applications',[UserController::class,'add_user_application'])->can('admin',User::class);
         Route::put('/users/{user}/applications/{user_application}',[UserController::class,'update_user_application'])->can('admin',User::class);

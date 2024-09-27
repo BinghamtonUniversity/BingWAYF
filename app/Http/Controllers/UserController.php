@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\UserIDP;
 use App\Models\UserApplication;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -47,6 +48,10 @@ class UserController extends Controller
     }
     public function delete_user_idp(Request $request, User $user, UserIDP $user_idp) {
         $user_idp->delete();
+        return "1";
+    }
+    public function impersonate(Request $request, User $user) {
+        Auth::login($user);
         return "1";
     }
     public function get_user_applications(Request $request, User $user) {

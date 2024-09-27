@@ -34,5 +34,9 @@ app.get('/api/users',function(all_users) {
         app.delete('/api/users/'+grid_event.model.attributes.id,{},function(data) {},function(data) {
             grid_event.model.undo();
         });
+    }).on("model:impersonate",function(grid_event) {
+        app.post('/api/users/'+grid_event.model.attributes.user_id+'/impersonate/',{},function(data) {},function(data) {
+            window.location = '/'
+        });
     });
 });

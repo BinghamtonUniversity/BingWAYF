@@ -19,7 +19,8 @@ class AdminController extends Controller
             ["name"=>"create","label"=>"New User"],'',
             ["name"=>"edit","label"=>"Update User"],
             ["label"=>"Manage Applications","name"=>"manage_applications","min"=>1,"max"=>1,"type"=>"default"],
-            ["label"=>"View IDPs","name"=>"view_idps","min"=>1,"max"=>1,"type"=>"default"],'',     
+            ["label"=>"View IDPs","name"=>"view_idps","min"=>1,"max"=>1,"type"=>"default"],
+            ["label"=>"Impersonate","name"=>"impersonate","min"=>1,"max"=>1,"type"=>"danger"],'',
             ["name"=>"delete","label"=>"Delete User"]
         ];
         return view('default.admin',[
