@@ -35,8 +35,8 @@ app.get('/api/users',function(all_users) {
             grid_event.model.undo();
         });
     }).on("model:impersonate",function(grid_event) {
-        app.post('/api/users/'+grid_event.model.attributes.id+'/impersonate',{},function(data) {},function(data) {
-            window.location = '/'
-        });
+        app.post('/api/users/'+grid_event.model.attributes.id+'/impersonate',{},function(data) {
+            window.location = '/';
+        },function(data) {});
     });
 });
