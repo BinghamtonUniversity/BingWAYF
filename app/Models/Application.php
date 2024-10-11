@@ -15,7 +15,6 @@ class Application extends Model
     ];
 
     protected $casts = [
-        'auth_client_id' => 'integer',
         'public' => 'boolean',
     ];
 

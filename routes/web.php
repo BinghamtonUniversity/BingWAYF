@@ -21,50 +21,51 @@ Route::middleware(['auth','auth.session'])->group(function () {
 
     Route::group(['prefix' => 'admin'], function () {
         Route::get('/', function (Request $request) {
-            return redirect('/admin/users');
-        })->can('admin',User::class);
-        Route::get('/users', [AdminController::class, 'users'])->can('admin',User::class);
-        Route::get('/users/{user}/idps', [AdminController::class, 'user_idps'])->can('admin',User::class);
-        Route::get('/users/{user}/applications', [AdminController::class, 'user_applications'])->can('admin',User::class);
-        Route::get('/idps', [AdminController::class, 'idps'])->can('admin',User::class);
-        Route::get('/idps/{idp}/users', [AdminController::class, 'idp_users'])->can('admin',User::class);
-        Route::get('/oauth_clients', [AdminController::class, 'oauth_clients'])->can('admin',User::class);
-        Route::get('/applications', [AdminController::class, 'applications'])->can('admin',User::class);
-        Route::get('/applications/{application}/users', [AdminController::class, 'application_users'])->can('admin',User::class);    
+            return redirect('/admin/applications');
+        })->can('app_admin',User::class);
+        Route::get('/users', [AdminController::class, 'users'])->can('super_admin',User::class);
+        Route::get('/users/{user}/idps', [AdminController::class, 'user_idps'])->can('super_admin',User::class);
+        Route::get('/users/{user}/applications', [AdminController::class, 'user_applications'])->can('super_admin',User::class);
+        Route::get('/idps', [AdminController::class, 'idps'])->can('super_admin',User::class);
+        Route::get('/idps/{idp}/users', [AdminController::class, 'idp_users'])->can('super_admin',User::class);
+        Route::get('/oauth_clients', [AdminController::class, 'oauth_clients'])->can('super_admin',User::class);
+        Route::get('/applications', [AdminController::class, 'applications'])->can('app_admin',User::class);
+        Route::get('/applications/{application}/users', [AdminController::class, 'application_users'])->can('app_admin',User::class);    
     });
 
     Route::group(['prefix' => 'api'], function () {
-        Route::get('/users',[UserController::class,'get_users'])->can('admin',User::class);
-        Route::post('/users',[UserController::class,'add_user'])->can('admin',User::class);
-        Route::put('/users/{user}',[UserController::class,'update_user'])->can('admin',User::class);
-        Route::delete('/users/{user}',[UserController::class,'delete_user'])->can('admin',User::class);
-        Route::get('/users/{user}/idps',[UserController::class,'get_user_idps'])->can('admin',User::class);
-        Route::post('/users/{user}/idps',[UserController::class,'add_user_idp'])->can('admin',User::class);
-        Route::put('/users/{user}/idps/{user_idp}',[UserController::class,'update_user_idp'])->can('admin',User::class);
-        Route::delete('/users/{user}/idps/{user_idp}',[UserController::class,'delete_user_idp'])->can('admin',User::class);
-        Route::post('/users/{user}/impersonate',[UserController::class,'impersonate'])->can('admin',User::class);
-        Route::get('/users/{user}/applications',[UserController::class,'get_user_applications'])->can('admin',User::class);
-        Route::post('/users/{user}/applications',[UserController::class,'add_user_application'])->can('admin',User::class);
-        Route::put('/users/{user}/applications/{user_application}',[UserController::class,'update_user_application'])->can('admin',User::class);
-        Route::delete('/users/{user}/applications/{user_application}',[UserController::class,'delete_user_application'])->can('admin',User::class);
+        Route::get('/users',[UserController::class,'get_users'])->can('app_admin',User::class);
+        Route::post('/users',[UserController::class,'add_user'])->can('app_admin',User::class);
+        Route::put('/users/{user}',[UserController::class,'update_user'])->can('super_admin',User::class);
+        Route::delete('/users/{user}',[UserController::class,'delete_user'])->can('super_admin',User::class);
+        Route::get('/users/{user}/idps',[UserController::class,'get_user_idps'])->can('super_admin',User::class);
+        Route::post('/users/{user}/idps',[UserController::class,'add_user_idp'])->can('super_admin',User::class);
+        Route::put('/users/{user}/idps/{user_idp}',[UserController::class,'update_user_idp'])->can('super_admin',User::class);
+        Route::delete('/users/{user}/idps/{user_idp}',[UserController::class,'delete_user_idp'])->can('super_admin',User::class);
+        Route::post('/users/{user}/impersonate',[UserController::class,'impersonate'])->can('super_admin',User::class);
+        Route::get('/users/{user}/applications',[UserController::class,'get_user_applications'])->can('super_admin',User::class);
+        Route::post('/users/{user}/applications',[UserController::class,'add_user_application'])->can('super_admin',User::class);
+        Route::put('/users/{user}/applications/{user_application}',[UserController::class,'update_user_application'])->can('app_admin',User::class);
+        Route::delete('/users/{user}/applications/{user_application}',[UserController::class,'delete_user_application'])->can('app_admin',User::class);
+        Route::get('/users/search/{search_string?}',[UserController::class,'search'])->can('super_admin',User::class);
         
-        Route::get('/idps',[IDPController::class,'get_idps'])->can('admin',User::class);
-        Route::post('/idps',[IDPController::class,'add_idp'])->can('admin',User::class);
-        Route::put('/idps/{idp}',[IDPController::class,'update_idp'])->can('admin',User::class);
-        Route::delete('/idps/{idp}',[IDPController::class,'delete_idp'])->can('admin',User::class);
-        Route::get('/idps/{idp}/users',[IDPController::class,'get_idp_users'])->can('admin',User::class);
+        Route::get('/idps',[IDPController::class,'get_idps'])->can('super_admin',User::class);
+        Route::post('/idps',[IDPController::class,'add_idp'])->can('super_admin',User::class);
+        Route::put('/idps/{idp}',[IDPController::class,'update_idp'])->can('super_admin',User::class);
+        Route::delete('/idps/{idp}',[IDPController::class,'delete_idp'])->can('super_admin',User::class);
+        Route::get('/idps/{idp}/users',[IDPController::class,'get_idp_users'])->can('super_admin',User::class);
         
-        Route::get('/applications',[ApplicationController::class,'get_applications'])->can('admin',User::class);
-        Route::post('/applications',[ApplicationController::class,'add_application']);
-        Route::put('/applications/{application}',[ApplicationController::class,'update_application'])->can('admin',User::class);
-        Route::delete('/applications/{application}',[ApplicationController::class,'delete_application'])->can('admin',User::class);
-        Route::get('/applications/{application}/users',[ApplicationController::class,'get_application_users'])->can('admin',User::class);
+        Route::get('/applications',[ApplicationController::class,'get_applications'])->can('app_admin',User::class);
+        Route::post('/applications',[ApplicationController::class,'add_application'])->can('super_admin',User::class);
+        Route::put('/applications/{application}',[ApplicationController::class,'update_application'])->can('app_admin',User::class);
+        Route::delete('/applications/{application}',[ApplicationController::class,'delete_application'])->can('app_admin',User::class);
+        Route::get('/applications/{application}/users',[ApplicationController::class,'get_application_users'])->can('app_admin',User::class);
 
-        Route::get('/oauth_clients',[OAuthController::class,'get_clients'])->can('admin',User::class);
-        Route::post('/oauth_clients',[OAuthController::class,'add_client'])->can('admin',User::class);
-        Route::put('/oauth_clients/{client}',[OAuthController::class,'update_client'])->can('admin',User::class);
-        Route::delete('/oauth_clients/{client}',[OAuthController::class,'delete_client'])->can('admin',User::class);
-        Route::delete('/oauth_clients/{client}/regenerate_secret',[OAuthController::class,'regenerate_secret'])->can('admin',User::class);
+        Route::get('/oauth_clients',[OAuthController::class,'get_clients'])->can('super_admin',User::class);
+        Route::post('/oauth_clients',[OAuthController::class,'add_client'])->can('super_admin',User::class);
+        Route::put('/oauth_clients/{client}',[OAuthController::class,'update_client'])->can('super_admin',User::class);
+        Route::delete('/oauth_clients/{client}',[OAuthController::class,'delete_client'])->can('super_admin',User::class);
+        Route::delete('/oauth_clients/{client}/regenerate_secret',[OAuthController::class,'regenerate_secret'])->can('super_admin',User::class);
     });
 });
 

@@ -3,6 +3,7 @@
 @section('title', 'Permission Denied')
 
 @section('content')
+<?php dd($client); ?>
     <div class="row">
         <div class="col-sm-offset-3 col-sm-6 ">
             <h1>Permission Denied</h1>

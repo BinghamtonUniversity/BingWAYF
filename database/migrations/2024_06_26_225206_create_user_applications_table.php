@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->index();
             $table->unsignedBigInteger('application_id')->index();
             $table->boolean('approved')->nullable()->default(null);
+            $table->boolean('admin')->default(false);
             $table->timestamp('last_login')->nullable()->default(null);
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('application_id')->references('id')->on('applications');

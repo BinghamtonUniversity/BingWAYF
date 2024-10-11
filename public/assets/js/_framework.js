@@ -232,3 +232,35 @@ app.copy = function(selector) {
     window.getSelection().removeAllRanges();
     app.alert("Copied to Clipboard")
 }
+
+gform.prototype.options.autoFocus = false;
+gform.types['user']= _.extend({}, gform.types['combobox'], {
+    toString: function(name,display){
+      if(!display){
+        if(typeof this.combo !== 'undefined'){
+          return '<dt>'+this.label+'</dt> <dd>'+(this.combo.value||'(empty)')+'</dd><hr>'
+        }else{
+            // console.log(this.get());
+          return '<dt>'+this.label+'</dt> <dd>'+(this.get()||'(empty)')+'</dd><hr>'
+        }
+      }else{
+        if(typeof this.options !== 'undefined' && this.options.length){
+          return _.find(this.options,{id:parseInt(this.value)})||this.value;
+        }else{
+          return this.value;
+        }
+      }
+    },
+    defaults: {
+        strict:true,
+        search:"/api/users/search/{{search}}{{value}}",
+        format: {
+            title:'{{{label}}}{{^label}}User{{/label}}',
+            label:"{{first_name}}{{#last_name}} {{last_name}}{{/last_name}}",
+            value:function(item){
+                return item.id;
+            },
+            display:'{{first_name}} {{last_name}}<div style="color:#aaa">{{email}}</div>'
+        }
+    }
+})

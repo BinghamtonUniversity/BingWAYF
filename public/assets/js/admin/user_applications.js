@@ -11,7 +11,8 @@ app.get('/api/users/'+app.data.id+'/applications',function(all_user_applications
             {label: 'User ID', name:'user_idp',type:'hidden'},
             {label: 'Application', name:'application_id',type:'select',options:'/api/applications',format:{label:"{{name}}", value:"{{id}}"}},
             {label: 'Approved', name: 'approved',type:'switch',options:[{label:'Not Approved',value:false},{label:'Approved',value:true}]},
-            {label: 'Last Login', name:'last_login',edit:false},
+            {label: 'Admin Permissions', name: 'admin',type:'switch',options:[{label:'Normal User',value:false},{label:'Application Administrator',value:true}]},
+            {label: 'Last Login', name:'last_login',edit:false, visible:false},
         ], 
         data: _.reverse(all_user_applications)
     }).on("model:edited",function(grid_event) {

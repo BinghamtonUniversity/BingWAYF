@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\UserIDP;
 use App\Entities\IdentityEntity;
 use App\Models\Passport\Client;
+use Illuminate\Support\Facades\DB;
 
 class OAuthController extends Controller
 {
@@ -66,9 +67,12 @@ class OAuthController extends Controller
     }
 
     public function get_clients(Request $request) {
-        $clients = Client::where('revoked',0)->get();
+        $clients = DB::table('oauth_clients')
+            ->select('id','name','secret','redirect')
+            ->where('revoked',0)->get();
         return $clients;
     }
+
     public function add_client(Request $request) {
         $client = new Client();
         $client->forceFill([

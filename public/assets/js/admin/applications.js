@@ -13,7 +13,6 @@ app.get('/api/applications',function(all_applications) {
             {label:'Logo', name: 'logo'},
             {label:'Description', name: 'description'},
             {label:'Auth Type', name: 'auth_type',type:'select',options:[{label:'OpenId',value:'openid'},{label:'OAuth',value:'oauth'},{label:'CAS',value:'cas'},{label:'SAML2',value:'saml2'}]},
-            {label:'Redirect URL', name: 'redirect_url'},
             {label:'Auth Client ID', name: 'auth_client_id',edit:false},
             {label:'Public', name: 'public',type:'switch',options:[{name:'Private',value:false},{name:'Public',value:true}],template:"{{#attributes.public}}Public{{/attributes.public}}{{^attributes.public}}Private{{/attributes.public}}"},
         ], 

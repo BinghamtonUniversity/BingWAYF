@@ -10,11 +10,12 @@ class UserApplication extends Model
     use HasFactory;
 
     protected $table = 'user_applications';
-    protected $fillable = ['application_id','user_id','approved','last_login'];
+    protected $fillable = ['application_id','user_id','approved','admin','last_login'];
     protected $casts = [
         'user_id' => 'integer',
         'application_id' => 'integer',
         'approved' => 'boolean',
+        'admin' => 'boolean',
         'last_login' => 'date:Y-m-d H:i:s'
     ];
 

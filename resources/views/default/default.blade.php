@@ -65,7 +65,7 @@
                 </a>
               @if(!is_null(Auth::user()))
                 <ul class="dropdown-menu">
-                  @can('admin', App\Models\User::class)
+                  @can('app_admin', App\Models\User::class)
                     <li  style="color:#ccc;" ><a href="/admin"><i class="fa fa-user-shield fa-fw"></i> Admin</a></li>
                   @endcan
                   <li  style="color:#ccc;" ><a href="/logout"><i class="fa fa-times-circle fa-fw"></i> Logout</a></li>

@@ -64,20 +64,36 @@
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right visible-xs-block">
+            @can('super_admin','App\User')
             <li><a href="/admin/users"><i class="fa fa-user fa-fw"></i>&nbsp; Users</a></li>
+            @endcan
+            @can('super_admin','App\User')
             <li><a href="/admin/idps"><i class="fa fa-users fa-fw"></i>&nbsp; IDPs</a></li>
+            @endcan
+            @can('app_admin','App\User')
             <li><a href="/admin/applications"><i class="fa fa-notes-medical fa-fw"></i>&nbsp; Applications</a></li>
+            @endcan
+            @can('super_admin','App\User')
             <li><a href="/admin/oauth_clients"><i class="fa fa-notes-medical fa-fw"></i>&nbsp; OpenID/OAuth Clients</a></li>
+            @endcan
           </ul>
         </div>
       </div>
     </nav>
     <div class="col-sm-3 col-md-2 sidebar">
       <ul class="nav nav-sidebar">
+        @can('super_admin','App\User')
         <li class="@if($page=='users') active @endif"><a href="/admin/users"><i class="fa fa-user fa-fw"></i>&nbsp; Users</a></li>
+        @endcan
+        @can('super_admin','App\User')
         <li class="@if($page=='idps') active @endif"><a href="/admin/idps"><i class="fa fa-users fa-fw"></i>&nbsp; IDPs</a></li>
+        @endcan
+        @can('app_admin','App\User')
         <li class="@if($page=='applications') active @endif"><a href="/admin/applications" ><i class="fa fa-pills fa-fw"></i>&nbsp; Applications</a></li>
+        @endcan
+        @can('super_admin','App\User')
         <li class="@if($page=='oauth_clients') active @endif"><a href="/admin/oauth_clients"><i class="fa fa-notes-medical fa-fw"></i>&nbsp; OpenID/OAuth Clients</a></li>
+        @endcan
       </ul>
     </div>
     <div class="container-fluid" id="main-container">
