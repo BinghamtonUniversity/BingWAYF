@@ -47,7 +47,7 @@ Route::middleware(['auth','auth.session'])->group(function () {
         Route::post('/users/{user}/applications',[UserController::class,'add_user_application'])->can('super_admin',User::class);
         Route::put('/users/{user}/applications/{user_application}',[UserController::class,'update_user_application'])->can('app_admin',User::class);
         Route::delete('/users/{user}/applications/{user_application}',[UserController::class,'delete_user_application'])->can('app_admin',User::class);
-        Route::get('/users/search/{search_string?}',[UserController::class,'search'])->can('super_admin',User::class);
+        Route::get('/users/search/{search_string?}',[UserController::class,'search'])->can('app_admin',User::class);
         
         Route::get('/idps',[IDPController::class,'get_idps'])->can('super_admin',User::class);
         Route::post('/idps',[IDPController::class,'add_idp'])->can('super_admin',User::class);

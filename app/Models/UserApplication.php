@@ -18,6 +18,7 @@ class UserApplication extends Model
         'admin' => 'boolean',
         'last_login' => 'date:Y-m-d H:i:s'
     ];
+    protected $with = ['user','application'];
 
     public function user(){
         return $this->belongsTo(User::class);
