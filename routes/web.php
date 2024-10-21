@@ -61,6 +61,7 @@ Route::middleware(['auth','auth.session'])->group(function () {
         Route::delete('/applications/{application}',[ApplicationController::class,'delete_application'])->can('app_admin',User::class);
         Route::get('/applications/{application}/users',[ApplicationController::class,'get_application_users'])->can('app_admin',User::class);
 
+        Route::get('/oauth_clients/{client}/request_access',[OAuthController::class,'request_access']);
         Route::get('/oauth_clients',[OAuthController::class,'get_clients'])->can('super_admin',User::class);
         Route::post('/oauth_clients',[OAuthController::class,'add_client'])->can('super_admin',User::class);
         Route::put('/oauth_clients/{client}',[OAuthController::class,'update_client'])->can('super_admin',User::class);

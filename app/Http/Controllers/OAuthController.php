@@ -6,15 +6,55 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use App\Models\UserIDP;
-use App\Entities\IdentityEntity;
+use App\Models\UserApplication;
+use App\Models\Application;
 use App\Models\Passport\Client;
-use Illuminate\Support\Facades\DB;
+use App\Entities\IdentityEntity;
 
 class OAuthController extends Controller
 {
     public function __construct() {
+    }
+
+    public function request_access(Request $request, Client $client) {
+        $application = Application::where('auth_type','openid')
+            ->where('auth_client_id',$client->id)->first();
+        if (is_null($application)) {
+            return response()->json(['error' => 'Application does not exist!'],403);
+        }
+        $user_ids = UserApplication::where('application_id',$application->id)
+            ->where('admin',true)
+            ->where('approved',true)
+            ->select('user_id')
+            ->get()->pluck('user_id');
+        $users = User::whereIn('id',$user_ids)
+            ->select('first_name','last_name','email')
+            ->get();
+        if (count($user_ids) === 0) {
+            return response()->json(['error' => 'No Admins for this App!'],403);
+        }
+
+        $body = 'You are receieving this email because you are an administrator of the "'.
+        $application->name.'" application.'."\n\n".
+        Auth::user()->first_name.' '.Auth::user()->last_name.' <'.Auth::user()->email.'>'.
+        ' has requested access to this application.'."\n\n".
+        'To address this request, please visit: '.
+        config('app.url').'/admin/applications/'.$application->id.'/users';
+
+        Mail::raw($body, function($message) use ($users,$application) { 
+            $message->from('noreply@binghamton.edu','BingWAYF');
+            $message->replyTo(Auth::user()->email,Auth::user()->first_name.' '.Auth::user()->last_name);
+            foreach($users as $user) {
+                $message->to($user->email,$user->first_name.' '.$user->last_name);
+            }
+            $message->subject('BingWAYF "'.$application->name.'" Access Request'); 
+        });
+
+        return ['success' => 'Email Sent!'];
     }
 
     public function profile(Request $request) {
