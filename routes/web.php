@@ -10,6 +10,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OAuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\IDPController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\SocialLoginController;
@@ -26,6 +27,9 @@ Route::middleware(['auth','auth.session'])->group(function () {
         Route::get('/users', [AdminController::class, 'users'])->can('super_admin',User::class);
         Route::get('/users/{user}/idps', [AdminController::class, 'user_idps'])->can('super_admin',User::class);
         Route::get('/users/{user}/applications', [AdminController::class, 'user_applications'])->can('super_admin',User::class);
+        Route::get('/users/{user}/groups', [AdminController::class, 'user_groups'])->can('super_admin',User::class);
+        Route::get('/groups', [AdminController::class, 'groups'])->can('super_admin',User::class);
+        Route::get('/groups/{group}/users', [AdminController::class, 'group_users'])->can('super_admin',User::class);
         Route::get('/idps', [AdminController::class, 'idps'])->can('super_admin',User::class);
         Route::get('/idps/{idp}/users', [AdminController::class, 'idp_users'])->can('super_admin',User::class);
         Route::get('/oauth_clients', [AdminController::class, 'oauth_clients'])->can('super_admin',User::class);
@@ -47,8 +51,17 @@ Route::middleware(['auth','auth.session'])->group(function () {
         Route::post('/users/{user}/applications',[UserController::class,'add_user_application'])->can('super_admin',User::class);
         Route::put('/users/{user}/applications/{user_application}',[UserController::class,'update_user_application'])->can('app_admin',User::class);
         Route::delete('/users/{user}/applications/{user_application}',[UserController::class,'delete_user_application'])->can('app_admin',User::class);
+        Route::get('/users/{user}/groups',[UserController::class,'get_user_groups'])->can('super_admin',User::class);
+        Route::post('/users/{user}/groups',[UserController::class,'add_user_group'])->can('super_admin',User::class);
+        Route::delete('/users/{user}/groups/{group}',[UserController::class,'delete_user_group'])->can('super_admin',User::class);
         Route::get('/users/search/{search_string?}',[UserController::class,'search'])->can('app_admin',User::class);
         
+        Route::get('/groups',[GroupController::class,'get_groups'])->can('super_admin',User::class);
+        Route::post('/groups',[GroupController::class,'add_group'])->can('super_admin',User::class);
+        Route::put('/groups/{group}',[GroupController::class,'update_group'])->can('super_admin',User::class);
+        Route::delete('/groups/{group}',[GroupController::class,'delete_group'])->can('super_admin',User::class);
+        Route::get('/groups/{group}/users',[GroupController::class,'get_groups_users'])->can('super_admin',User::class);
+
         Route::get('/idps',[IDPController::class,'get_idps'])->can('super_admin',User::class);
         Route::post('/idps',[IDPController::class,'add_idp'])->can('super_admin',User::class);
         Route::put('/idps/{idp}',[IDPController::class,'update_idp'])->can('super_admin',User::class);

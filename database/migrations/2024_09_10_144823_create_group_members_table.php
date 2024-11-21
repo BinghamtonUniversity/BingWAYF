@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('group_id')->index();
             $table->unsignedBigInteger('user_id')->index();
+            $table->unique(['user_id','group_id']);
             $table->timestamps();
         });
     }

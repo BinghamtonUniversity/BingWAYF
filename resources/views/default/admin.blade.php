@@ -68,6 +68,9 @@
             <li><a href="/admin/users"><i class="fa fa-user fa-fw"></i>&nbsp; Users</a></li>
             @endcan
             @can('super_admin','App\User')
+            <li><a href="/admin/groups"><i class="fa fa-users fa-fw"></i>&nbsp; Groups</a></li>
+            @endcan
+            @can('super_admin','App\User')
             <li><a href="/admin/idps"><i class="fa fa-users fa-fw"></i>&nbsp; IDPs</a></li>
             @endcan
             @can('app_admin','App\User')
@@ -84,6 +87,9 @@
       <ul class="nav nav-sidebar">
         @can('super_admin','App\User')
         <li class="@if($page=='users') active @endif"><a href="/admin/users"><i class="fa fa-user fa-fw"></i>&nbsp; Users</a></li>
+        @endcan
+        @can('super_admin','App\User')
+        <li class="@if($page=='groups') active @endif"><a href="/admin/groups"><i class="fa fa-users fa-fw"></i>&nbsp; Groups</a></li>
         @endcan
         @can('super_admin','App\User')
         <li class="@if($page=='idps') active @endif"><a href="/admin/idps"><i class="fa fa-users fa-fw"></i>&nbsp; IDPs</a></li>

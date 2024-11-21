@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\UserIDP;
 use App\Models\UserApplication;
+use App\Models\GroupMember;
+use App\Models\Group;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -30,8 +32,33 @@ class UserController extends Controller
         $user->delete();
         return "1";
     }
+    public function get_user_groups(Request $request, User $user) {
+        return GroupMember::where('user_id',$user->id)->get();
+    }
     public function get_user_idps(Request $request, User $user) {
-        return UserIDP::where('user_id',$user->id)->get();
+        return GroupMember::where('user_id',$user->id)->get();
+    }
+    public function add_user_group(Request $request, User $user) {
+        $existing_membership = GroupMember::where('user_id',$user->id)
+            ->where('group_id',$request->group_id)
+            ->with('user')->first();
+        if (!is_null($existing_membership)) {
+            return $existing_membership;
+        }
+        $user_group = new GroupMember([
+            'group_id' => $request->group_id,
+            'user_id' => $user->id,
+        ]);
+        $user_group->save();
+        return GroupMember::where('id',$user_group->id)->with('user')->first();
+    }
+    public function delete_user_group(Request $request, User $user, Group $group) {
+        $user_group = GroupMember::where('user_id',$user->id)
+            ->where('group_id',$group->id)->first();
+        if (!is_null($user_group)) {
+            $user_group->delete();
+        }
+        return "1";
     }
     public function add_user_idp(Request $request, User $user) {
         $user_idp = new UserIDP([

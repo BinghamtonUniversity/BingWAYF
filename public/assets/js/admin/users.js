@@ -18,6 +18,8 @@ app.get('/api/users',function(all_users) {
         window.location = '/admin/users/'+grid_event.model.attributes.id+'/idps';
     }).on("model:manage_applications",function(grid_event) {
         window.location = '/admin/users/'+grid_event.model.attributes.id+'/applications';
+    }).on("model:manage_groups",function(grid_event) {
+        window.location = '/admin/users/'+grid_event.model.attributes.id+'/groups';
     }).on("model:edited",function(grid_event) {
         app.put('/api/users/'+grid_event.model.attributes.id,grid_event.model.attributes,function(data) {
             grid_event.model.update(data)
