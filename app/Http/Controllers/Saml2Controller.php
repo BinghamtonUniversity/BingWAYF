@@ -156,7 +156,7 @@ class Saml2Controller extends Controller
             'email' => '{{mail}}',
         ];
 
-        $m = new \Mustache_Engine;                                    
+        $m = new \Mustache_Engine;
         $attributes = [
             'unique_id' => $m->render($data_map['unique_id'], $saml_attributes),
             'first_name' => $m->render($data_map['first_name'], $saml_attributes),

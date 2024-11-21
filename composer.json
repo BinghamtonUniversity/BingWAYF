@@ -12,6 +12,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.15",
         "laravel/tinker": "^2.9",
+        "mustache/mustache": "^2.14",
         "onelogin/php-saml": "^4.2",
         "ronvanderheijden/openid-connect": "^1.2",
         "socialiteproviders/microsoft": "^4.5"
