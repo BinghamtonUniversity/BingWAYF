@@ -32,10 +32,10 @@ class UserController extends Controller
         $user->delete();
         return "1";
     }
-    public function get_user_groups(Request $request, User $user) {
-        return GroupMember::where('user_id',$user->id)->get();
-    }
     public function get_user_idps(Request $request, User $user) {
+        return UserIDP::where('user_id',$user->id)->get();
+    }
+    public function get_user_groups(Request $request, User $user) {
         return GroupMember::where('user_id',$user->id)->get();
     }
     public function add_user_group(Request $request, User $user) {
