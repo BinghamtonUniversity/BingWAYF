@@ -150,7 +150,7 @@ class Saml2Controller extends Controller
         }
 
         $data_map = [
-            'unique_id' => '{{mail}}',
+            'unique_id' => '{{#mail}}{{mail}}{{/mail}}{{^mail}}{{#id}}{{id}}{{/id}}{{/mail}}',
             'first_name' => '{{givenName}}',
             'last_name' => '{{sn}}',
             'email' => '{{mail}}',
