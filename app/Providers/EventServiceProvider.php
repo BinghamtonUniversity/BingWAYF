@@ -21,6 +21,9 @@ class EventServiceProvider extends ServiceProvider
         \SocialiteProviders\Manager\SocialiteWasCalled::class => [
             \SocialiteProviders\Microsoft\MicrosoftExtendSocialite::class.'@handle',
         ],
+        \Illuminate\Mail\Events\MessageSending::class => [
+            \App\Listeners\AddSesTenantHeader::class,
+        ],
     ];
 
     /**
