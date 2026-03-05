@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\IDP;
+use App\Models\SAML2IDP;
 
 class parsemetadata extends Command
 {
@@ -129,7 +129,7 @@ class parsemetadata extends Command
                 }
 
                 // Insert / Update Data in Database
-                $flight = IDP::updateOrCreate(
+                $flight = SAML2IDP::updateOrCreate(
                     ['entityId' => $newentity['entityId']],
                     [
                         'name' => $newentity['name'], 
